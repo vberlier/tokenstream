@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "tokenstream"
+version = "0.1.0"
+description = "A versatile token stream for handwritten parsers"
+authors = ["Valentin Berlier <berlier.v@gmail.com>"]
+license = "MIT"
+
+homepage = "https://github.com/vberlier/tokenstream"
+repository = "https://github.com/vberlier/tokenstream"
+documentation = "https://github.com/vberlier/tokenstream"
+
+readme = "README.md"
+
+keywords = [
+  "parsing",
+  "tokenizer",
+  "lexer",
+  "recursive-descent-parser",
+  "token-stream",
+]
+
+include = ["tokenstream/py.typed"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^21.6b0", allow-prereleases = true}
+pytest = "^6.2.4"
+isort = "^5.8.0"
+pytest-insta = "^0.1.10"
+python-semantic-release = "^7.16.1"
+
+[tool.black]
+target-version = ["py38"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | node_modules
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.semantic_release]
+branch = "main"
+version_variable = ["tokenstream/__init__.py:__version__"]
+version_toml = "pyproject.toml:tool.poetry.version"
+major_on_zero = false
+build_command = "poetry build"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
