@@ -11,6 +11,8 @@ Example usage:
     {'foo': 'bar', 'something': {'else': [42]}}
     > {"this": "\"that\""}
     {'this': '"that"'}
+    > [}
+    UnexpectedToken: Expected curly '{', bracket '[', string or number but got curly '}'
 """
 
 

@@ -7,6 +7,12 @@ Example usage:
     3.0
     $ python calculator.py '(2 + 9) / 3'
     3.6666666666666665
+    $ python calculator.py 1 + 6 /
+    UnexpectedEOF: Expected number or brace '(' but reached end of file
+    $ python calculator.py '1 + 7) / 4 + 6'
+    InvalidSyntax: ) / 4 + 6
+    $ python calculator.py '1 + 7 - / 4 + 6'
+    UnexpectedToken: Expected number or brace '(' but got div '/'
 """
 
 
