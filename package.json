@@ -1,7 +1,8 @@
 {
   "scripts": {
     "watch": "poetry run pyright -w",
-    "check": "poetry run pyright"
+    "check": "poetry run pyright",
+    "verifytypes": "poetry run pyright --verifytypes tokenstream"
   },
   "devDependencies": {
     "pyright": "^1.1.148"
