@@ -41,7 +41,7 @@ jobs:
       - name: Verify library interface
         run: npm run verifytypes
       - name: Check formatting
-        run: poetry run black --check tokenstream tests
+        run: poetry run black --check tokenstream examples tests
       - name: Release
         if: |
           github.repository == 'vberlier/tokenstream'
