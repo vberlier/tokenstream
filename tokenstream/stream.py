@@ -282,6 +282,15 @@ class TokenStream:
 
         return token
 
+    def peek_until(self, *patterns: TokenPattern) -> Iterator[Token]:
+        """Collect tokens until one of the given patterns matches."""
+        while token := self.peek():
+            if token.match(*patterns):
+                next(self)
+                return
+            yield token
+        raise self.emit_error(UnexpectedEOF(patterns))
+
     @overload
     def collect(self) -> Iterator[Token]:
         ...
