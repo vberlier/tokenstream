@@ -315,7 +315,8 @@ class TokenStream:
     def collect(self, *patterns: TokenPattern) -> Iterator[Any]:
         """Collect tokens matching the given patterns."""
         if not patterns:
-            return self
+            yield from self
+            return
 
         while token := self.peek():
             matches = [token if token.match(pattern) else None for pattern in patterns]
