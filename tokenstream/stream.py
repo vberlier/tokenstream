@@ -1,5 +1,7 @@
 __all__ = [
     "TokenStream",
+    "SyntaxRules",
+    "CheckpointCommit",
 ]
 
 import re
@@ -7,6 +9,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import (
     Any,
+    Callable,
     ClassVar,
     Dict,
     Iterable,
@@ -22,6 +25,7 @@ from .error import InvalidSyntax, UnexpectedEOF, UnexpectedToken
 from .token import SourceLocation, Token, TokenPattern
 
 SyntaxRules = Tuple[Tuple[str, str], ...]
+CheckpointCommit = Callable[[], None]
 
 
 def extra_field(**kwargs: Any) -> Any:
@@ -374,3 +378,14 @@ class TokenStream:
         """Raise an exception if there is leftover input."""
         if self.peek():
             raise self.emit_error(InvalidSyntax(self.head()))
+
+    @contextmanager
+    def checkpoint(self) -> Iterator[CheckpointCommit]:
+        """Reset the stream to the current token at the end of the with statement."""
+        previous_index = [self.index]
+
+        try:
+            yield lambda: previous_index.clear()
+        finally:
+            if previous_index:
+                self.index = previous_index[0]
