@@ -186,7 +186,7 @@ class TokenStream:
         if (line_start := value.rfind("\n")) == -1:
             end_colno = self.location.colno + len(value)
         else:
-            end_colno = end_pos - line_start + 1
+            end_colno = len(value) - line_start
 
         token = Token(
             type=token_type,
