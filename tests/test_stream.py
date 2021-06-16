@@ -1,4 +1,6 @@
-from tokenstream import TokenStream
+import pytest
+
+from tokenstream import TokenStream, UnexpectedToken
 
 
 def test_basic():
@@ -6,6 +8,74 @@ def test_basic():
 
     with stream.syntax(word=r"\w+"):
         assert [token.value for token in stream] == ["hello", "world"]
+
+
+def test_expect():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"):
+        assert stream.expect().value == "hello"
+        assert stream.expect().value == "world"
+
+
+def test_expect_type():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"):
+        assert stream.expect("word").value == "hello"
+        assert stream.expect("word").value == "world"
+
+
+def test_expect_fail():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        assert stream.expect("word").value == "hello"
+
+        with pytest.raises(  # type: ignore
+            UnexpectedToken, match="Expected number but got word 'world'"
+        ):
+            stream.expect("number").value
+
+
+def test_reject_whitespace():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"), stream.intercept("whitespace", "newline"):
+        assert len(stream.ignored_tokens) == 0
+
+        stream.expect("word").value
+        with pytest.raises(  # type: ignore
+            UnexpectedToken, match="Expected word but got whitespace ' '"
+        ):
+            stream.expect("word").value
+
+
+def test_ignore_comments():
+    stream = TokenStream(
+        """
+        # this is a comment
+        hello # also a comment
+        world
+        """
+    )
+
+    with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.ignore("comment"):
+        assert [token.value for token in stream] == ["hello", "world"]
+
+
+def test_indent():
+    source = """
+hello
+    world
+"""
+    stream = TokenStream(source)
+
+    with stream.syntax(word=r"\w+"), stream.indent():
+        stream.expect("word")
+        stream.expect("indent")
+        stream.expect("word")
+        stream.expect("dedent")
 
 
 def test_checkpoint():
