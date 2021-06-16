@@ -26,16 +26,16 @@ print(parse_sexp(TokenStream("(hello (world 42))")))  # ['hello', ['world', 42]]
 
 ## Introduction
 
-Writing recursive-descent parsers by hand can be quite elegant but it's often a bit more verbose than expected. In particular, handling indentation and reporting proper syntax errors can be pretty challenging. This package provides a powerful general-purpose token stream that addresses these issues and more.
+Writing recursive-descent parsers by hand can be quite elegant but it's often a bit more verbose than expected, especially when it comes to handling indentation and reporting proper syntax errors. This package provides a powerful general-purpose token stream that addresses these issues and more.
 
 ### Features
 
-- Define token types with regular expressions
-- The set of recognizable tokens can be defined dynamically during parsing
+- Define the set of recognizable tokens dynamically with regular expressions
 - Transparently skip over irrelevant tokens
 - Expressive API for matching, collecting, peeking, and expecting tokens
 - Clean error reporting with line numbers and column numbers
-- Natively understands indentation-based syntax
+- Contextual support for indentation-based syntax
+- Checkpoints for backtracking parsers
 - Works well with Python 3.10+ match statements
 
 ## Installation
@@ -57,7 +57,66 @@ with stream.syntax(word=r"\w+"):
     print([token.value for token in stream])  # ['hello', 'world']
 ```
 
-The token stream is iterable and will yield all the extracted tokens one after the other.
+The token stream is iterable and will yield all the extracted tokens one after the other. You can also retrieve tokens from the token stream one at a time by using the `expect()` method.
+
+```python
+stream = TokenStream("hello world")
+
+with stream.syntax(word=r"\w+"):
+    print(stream.expect().value)  # "hello"
+    print(stream.expect().value)  # "world"
+```
+
+The `expect()` method lets you ensure that the extracted token matches a specified type and will raise an exception otherwise.
+
+```python
+stream = TokenStream("hello world")
+
+with stream.syntax(number=r"\d+", word=r"\w+"):
+    print(stream.expect("word").value)  # "hello"
+    print(stream.expect("number").value)  # UnexpectedToken: Expected number but got word 'world'
+```
+
+Newlines and whitespace are ignored by default. You can reject interspersed whitespace by intercepting the built-in `newline` and `whitespace` tokens.
+
+```python
+stream = TokenStream("hello world")
+
+with stream.syntax(word=r"\w+"), stream.intercept("newline", "whitespace"):
+    print(stream.expect("word").value)  # "hello"
+    print(stream.expect("word").value)  # UnexpectedToken: Expected word but got whitespace ' '
+```
+
+The opposite of the `intercept()` method is `ignore()`. It allows you to ignore tokens and handle comments pretty easily.
+
+```python
+stream = TokenStream(
+    """
+    # this is a comment
+    hello # also a comment
+    world
+    """
+)
+
+with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.ignore("comment"):
+    print([token.value for token in stream])  # ['hello', 'world']
+```
+
+To enable indentation you can use the `indent()` method. The stream will now yield balanced pairs of `indent` and `dedent` tokens when the indentation changes.
+
+```python
+source = """
+hello
+    world
+"""
+stream = TokenStream(source)
+
+with stream.syntax(word=r"\w+"), stream.indent():
+    stream.expect("word")
+    stream.expect("indent")
+    stream.expect("word")
+    stream.expect("dedent")
+```
 
 ## Match statements
 
