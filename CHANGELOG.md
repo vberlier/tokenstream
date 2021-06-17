@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.1 (2021-06-17)
+### Fix
+* Typo ([`934f52c`](https://github.com/vberlier/tokenstream/commit/934f52c1d5c513b208ac669249f2a454ab8cd68e))
+
 ## v0.4.0 (2021-06-17)
 ### Feature
 * Add collect_any and docs ([`2d35ba3`](https://github.com/vberlier/tokenstream/commit/2d35ba35ce889002d3d8f205e9a9dd1ae7b78618))
