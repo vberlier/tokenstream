@@ -38,6 +38,8 @@ Writing recursive-descent parsers by hand can be quite elegant but it's often a 
 - Checkpoints for backtracking parsers
 - Works well with Python 3.10+ match statements
 
+Check out the [`examples`](https://github.com/vberlier/tokenstream/tree/main/examples) directory for practical examples.
+
 ## Installation
 
 The package can be installed with `pip`.
@@ -146,7 +148,7 @@ with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.indent(skip=["comment"]
 
 ### Checkpoints
 
-The `checkpoint()` method returns a context manager that resets the stream at the current token at the end of the `with` statement. You can use the returned `commit()` function to keep the state of the stream at the end of the `with` statement.
+The `checkpoint()` method returns a context manager that resets the stream to the current token at the end of the `with` statement. You can use the returned `commit()` function to keep the state of the stream at the end of the `with` statement.
 
 ```python
 stream = TokenStream("hello world")

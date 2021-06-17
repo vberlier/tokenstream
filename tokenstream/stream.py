@@ -83,11 +83,11 @@ class TokenStream:
         use the higher-level :meth:`checkpoint` method for this.
 
     tokens
-        A list accumulating all the extracting tokens.
+        A list accumulating all the extracted tokens.
 
         The list contains all the extracted tokens, even the ones ignored
         when using the :meth:`ignore` method. For this reason you shouldn't
-        try to index into the list directly, and use methods like :meth:`expect`,
+        try to index into the list directly. Use methods like :meth:`expect`,
         :meth:`peek`, or :meth:`collect` instead.
 
     indentation
@@ -98,12 +98,16 @@ class TokenStream:
         A set of token types for which the token stream shouldn't emit indentation
         changes.
 
+        Can be set using the ``skip`` argument of the :meth:`indent` method.
+
     generator
         An instance of the :meth:`generate_tokens` generator that the stream iterates
         iterates through to extract and emit tokens.
 
+        Should be considered internal.
+
     ignored_tokens
-        A set of tokens types that the stream skips over when iterating, peeking,
+        A set of token types that the stream skips over when iterating, peeking,
         and expecting tokens.
 
     regex_cache
@@ -134,7 +138,11 @@ class TokenStream:
         self.ignored_tokens = {"whitespace", "newline"}
 
     def bake_regex(self) -> None:
-        """Compile the syntax rules."""
+        """Compile the syntax rules.
+
+        Called automatically upon instanciation and when the syntax rules change.
+        Should be considered internal.
+        """
         self.regex = re.compile(
             "|".join(
                 f"(?P<{name}>{regex})"
@@ -161,6 +169,9 @@ class TokenStream:
         ...     print(stream.tokens[-1].value)
         world
         hello
+
+        Mostly used to ensure consistency in some of the provided context managers.
+        Should be considered internal.
         """
         if self.index + 1 < len(self.tokens):
             self.tokens = self.tokens[: self.index + 1]
@@ -353,7 +364,7 @@ class TokenStream:
     def current(self) -> Token:
         """The current token.
 
-        Can only be accessed if the stream started extracted tokens.
+        Can only be accessed if the stream started extracting tokens.
         """
         return self.tokens[self.index]
 
@@ -526,6 +537,8 @@ class TokenStream:
         'hello'
         'world'
         'hello'
+        >>> stream.previous.value
+        ' '
         """
         previous_index = self.index
         token = None
@@ -796,7 +809,7 @@ class TokenStream:
 
     @contextmanager
     def checkpoint(self) -> Iterator[CheckpointCommit]:
-        """Reset the stream to the current token at the end of the with statement.
+        """Reset the stream to the current token at the end of the ``with`` statement.
 
         >>> stream = TokenStream("hello world")
         >>> with stream.syntax(word=r"[a-z]+"):
