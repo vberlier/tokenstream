@@ -78,6 +78,22 @@ hello
         stream.expect("dedent")
 
 
+def test_indent_comment():
+    source = """
+hello
+        # some comment
+    world
+    """
+    stream = TokenStream(source)
+
+    with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.indent(skip=["comment"]):
+        stream.expect("word")
+        stream.expect("comment")
+        stream.expect("indent")
+        stream.expect("word")
+        stream.expect("dedent")
+
+
 def test_checkpoint():
     stream = TokenStream("hello world")
 

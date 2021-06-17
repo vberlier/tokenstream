@@ -221,7 +221,7 @@ class TokenStream:
                     and self.indentation
                     and self.current.type == "whitespace"
                     and self.current.location.colno == 1
-                    and match.lastgroup not in self.ignored_tokens
+                    and match.lastgroup not in self.indentation_skip
                 ):
                     indent = len(self.current.value.expandtabs())
 
