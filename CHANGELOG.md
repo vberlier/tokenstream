@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2021-06-17)
+### Feature
+* Add collect_any and docs ([`2d35ba3`](https://github.com/vberlier/tokenstream/commit/2d35ba35ce889002d3d8f205e9a9dd1ae7b78618))
+
+### Fix
+* Take into account indentation_skip ([`cbfe3e3`](https://github.com/vberlier/tokenstream/commit/cbfe3e3c5f98b91346544cfe9af0e9dcff595343))
+
 ## v0.3.0 (2021-06-16)
 ### Feature
 * Add stream checkpoint ([`8ad92bf`](https://github.com/vberlier/tokenstream/commit/8ad92bfeea17fb5b5d6abbb518df6f43c5209b61))
