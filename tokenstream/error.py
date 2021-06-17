@@ -5,27 +5,46 @@ __all__ = [
 ]
 
 
-from typing import Tuple
+from typing import Sequence
 
 from .token import SourceLocation, Token, TokenPattern, explain_patterns
 
 
 class InvalidSyntax(Exception):
-    """Raised when the input contains invalid syntax."""
+    """Raised when the input contains invalid syntax.
+
+    Attributes
+    ----------
+    location
+        The location of the error.
+    """
 
     location: SourceLocation
 
-    def format(self, filename: str, message: str) -> str:
-        """Return a string representing the error and its location in a given file."""
+    def format(self, filename: str) -> str:
+        """Return a string representing the error and its location in a given file.
+
+        >>> try:
+        ...     TokenStream("hello").expect()
+        ... except InvalidSyntax as exc:
+        ...     print(exc.format("path/to/my_file.txt"))
+        path/to/my_file.txt:1:1: hello
+        """
         return self.location.format(filename, str(self))
 
 
 class UnexpectedEOF(InvalidSyntax):
-    """Raised when the input ends unexpectedly."""
+    """Raised when the input ends unexpectedly.
 
-    expected_patterns: Tuple[TokenPattern, ...]
+    Attributes
+    ----------
+    expected_patterns
+        The patterns that the parser was expecting instead of reaching end of the file.
+    """
 
-    def __init__(self, expected_patterns: Tuple[TokenPattern, ...] = ()):
+    expected_patterns: Sequence[TokenPattern]
+
+    def __init__(self, expected_patterns: Sequence[TokenPattern] = ()):
         super().__init__(expected_patterns)
         self.expected_patterns = expected_patterns
 
@@ -36,12 +55,20 @@ class UnexpectedEOF(InvalidSyntax):
 
 
 class UnexpectedToken(InvalidSyntax):
-    """Raised when the input contains an unexpected token."""
+    """Raised when the input contains an unexpected token.
+
+    Attributes
+    ----------
+    token
+        The unexpected token that was encountered.
+    expected_patterns
+        The patterns that the parser was expecting instead.
+    """
 
     token: Token
-    expected_patterns: Tuple[TokenPattern, ...]
+    expected_patterns: Sequence[TokenPattern]
 
-    def __init__(self, token: Token, expected_patterns: Tuple[TokenPattern, ...] = ()):
+    def __init__(self, token: Token, expected_patterns: Sequence[TokenPattern] = ()):
         super().__init__(token, expected_patterns)
         self.token = token
         self.expected_patterns = expected_patterns

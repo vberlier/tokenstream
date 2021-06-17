@@ -57,6 +57,10 @@ with stream.syntax(word=r"\w+"):
     print([token.value for token in stream])  # ['hello', 'world']
 ```
 
+Check out the full [API reference](https://vberlier.github.io/tokenstream/api_reference/) for more details.
+
+### Expecting tokens
+
 The token stream is iterable and will yield all the extracted tokens one after the other. You can also retrieve tokens from the token stream one at a time by using the `expect()` method.
 
 ```python
@@ -76,6 +80,8 @@ with stream.syntax(number=r"\d+", word=r"\w+"):
     print(stream.expect("word").value)  # "hello"
     print(stream.expect("number").value)  # UnexpectedToken: Expected number but got word 'world'
 ```
+
+### Filtering the stream
 
 Newlines and whitespace are ignored by default. You can reject interspersed whitespace by intercepting the built-in `newline` and `whitespace` tokens.
 
@@ -102,6 +108,8 @@ with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.ignore("comment"):
     print([token.value for token in stream])  # ['hello', 'world']
 ```
 
+### Indentation
+
 To enable indentation you can use the `indent()` method. The stream will now yield balanced pairs of `indent` and `dedent` tokens when the indentation changes.
 
 ```python
@@ -118,7 +126,41 @@ with stream.syntax(word=r"\w+"), stream.indent():
     stream.expect("dedent")
 ```
 
-## Match statements
+To prevent some tokens from triggering unwanted indentation changes you can use the `skip` argument.
+
+```python
+source = """
+hello
+        # some comment
+    world
+"""
+stream = TokenStream(source)
+
+with stream.syntax(word=r"\w+", comment=r"#.+$"), stream.indent(skip=["comment"]):
+    stream.expect("word")
+    stream.expect("comment")
+    stream.expect("indent")
+    stream.expect("word")
+    stream.expect("dedent")
+```
+
+### Checkpoints
+
+The `checkpoint()` method returns a context manager that resets the stream at the current token at the end of the `with` statement. You can use the returned `commit()` function to keep the state of the stream at the end of the `with` statement.
+
+```python
+stream = TokenStream("hello world")
+
+with stream.syntax(word=r"\w+"):
+    with stream.checkpoint():
+        print([token.value for token in stream])  # ['hello', 'world']
+    with stream.checkpoint() as commit:
+        print([token.value for token in stream])  # ['hello', 'world']
+        commit()
+    print([token.value for token in stream])  # []
+```
+
+### Match statements
 
 Match statements make it very intuitive to process tokens extracted from the token stream. If you're using Python 3.10+ give it a try and see if you like it.
 

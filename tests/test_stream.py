@@ -38,6 +38,31 @@ def test_expect_fail():
             stream.expect("number").value
 
 
+def test_peek():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"):
+        assert stream.peek() is stream.expect()
+
+
+def test_peek_multiple():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"):
+        token = stream.peek(2)
+        stream.expect()
+        assert stream.expect() is token
+
+
+def test_peek_backwards():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"):
+        first = stream.expect()
+        stream.expect()
+        assert first is stream.peek(-1)
+
+
 def test_reject_whitespace():
     stream = TokenStream("hello world")
 
