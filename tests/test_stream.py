@@ -1,3 +1,5 @@
+from typing import Tuple, Union
+
 import pytest
 
 from tokenstream import TokenStream, UnexpectedToken
@@ -138,3 +140,26 @@ def test_checkpoint_commit():
             assert next(stream).value == "world"
             commit()
         assert [token.value for token in stream] == []
+
+
+def test_checkpoint_error():
+    stream = TokenStream("hello world 1 2 3 thing")
+
+    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:
+        with stream.checkpoint() as commit:
+            triplet = (
+                int(stream.expect("number").value),
+                int(stream.expect("number").value),
+                int(stream.expect("number").value),
+            )
+            commit()
+            return triplet
+        return stream.expect("word").value  # type: ignore
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        assert [argument(stream) for _ in stream.peek_until()] == [
+            "hello",
+            "world",
+            (1, 2, 3),
+            "thing",
+        ]

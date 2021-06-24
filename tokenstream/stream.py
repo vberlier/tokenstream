@@ -838,7 +838,8 @@ class TokenStream:
         'hello'
         'hello'
 
-        You can use the returned ``commit()`` function to keep the state of the stream at the end of the ``with`` statement.
+        You can use the returned ``commit()`` function to keep the state of the stream
+        at the end of the ``with`` statement.
 
         >>> stream = TokenStream("hello world")
         >>> with stream.syntax(word=r"[a-z]+"):
@@ -848,11 +849,16 @@ class TokenStream:
         ...     stream.expect("word").value
         'hello'
         'world'
+
+        Checkpoints will swallow syntax errors until the ``commit()`` function is called.
         """
         previous_index = [self.index]
 
         try:
             yield lambda: previous_index.clear()
+        except InvalidSyntax:
+            if not previous_index:
+                raise
         finally:
             if previous_index:
                 self.index = previous_index[0]
