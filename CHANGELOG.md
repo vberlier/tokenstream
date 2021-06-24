@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2021-06-24)
+### Feature
+* Add alternative method and choose method ([`0794172`](https://github.com/vberlier/tokenstream/commit/0794172e558722bceb3353af609562520185967c))
+
+### Fix
+* Swallow syntax errors when checkpoint is not committed yet ([`54e77ef`](https://github.com/vberlier/tokenstream/commit/54e77ef25033cd0a19ec7d716deb855ac389d0d7))
+* Don't raise UnexpectedEOF if peek_until without patterns ([`bcee95a`](https://github.com/vberlier/tokenstream/commit/bcee95af5d25344f29f9de43c3b6ed2c7d1e2c27))
+
 ## v0.4.1 (2021-06-17)
 ### Fix
 * Typo ([`934f52c`](https://github.com/vberlier/tokenstream/commit/934f52c1d5c513b208ac669249f2a454ab8cd68e))
