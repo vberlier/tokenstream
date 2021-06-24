@@ -5,12 +5,13 @@ __all__ = [
 ]
 
 import re
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass, field
 from typing import (
     Any,
     Callable,
     ClassVar,
+    ContextManager,
     Dict,
     Iterable,
     Iterator,
@@ -18,11 +19,15 @@ from typing import (
     Optional,
     Set,
     Tuple,
+    TypeVar,
     overload,
 )
 
 from .error import InvalidSyntax, UnexpectedEOF, UnexpectedToken
 from .token import SourceLocation, Token, TokenPattern
+
+T = TypeVar("T")
+
 
 SyntaxRules = Tuple[Tuple[str, str], ...]
 CheckpointCommit = Callable[[], None]
@@ -862,3 +867,49 @@ class TokenStream:
         finally:
             if previous_index:
                 self.index = previous_index[0]
+
+    @contextmanager
+    def alternative(self) -> Iterator[None]:
+        """Keep going if the code within the ``with`` statement raises a syntax error.
+
+        >>> stream = TokenStream("hello world 123")
+        >>> with stream.syntax(word=r"[a-z]+", number=r"[0-9]+"):
+        ...     stream.expect("word").value
+        ...     stream.expect("word").value
+        ...     with stream.alternative():
+        ...         stream.expect("word").value
+        ...     stream.expect("number").value
+        'hello'
+        'world'
+        '123'
+        """
+        with self.checkpoint() as commit:
+            yield
+            commit()
+
+    def choose(self, *args: T) -> Iterator[Tuple[T, ContextManager[None]]]:
+        """Iterate over each argument until one of the alternative succeeds.
+
+        >>> stream = TokenStream("hello world 123")
+        >>> with stream.syntax(word=r"[a-z]+", number=r"[0-9]+"):
+        ...     while stream.peek():
+        ...         for token_type, alternative in stream.choose("word", "number"):
+        ...             with alternative:
+        ...                 stream.expect(token_type).value
+        'hello'
+        'world'
+        '123'
+        """
+        should_break = False
+
+        @contextmanager
+        def alternative():
+            with self.alternative():
+                nonlocal should_break
+                yield
+                should_break = True
+
+        for i, arg in enumerate(args):
+            yield arg, nullcontext() if i == len(args) - 1 else alternative()
+            if should_break:
+                break

@@ -1,4 +1,4 @@
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 import pytest
 
@@ -163,3 +163,72 @@ def test_checkpoint_error():
             (1, 2, 3),
             "thing",
         ]
+
+
+def test_alternative():
+    stream = TokenStream("hello world 1 2 3 thing")
+
+    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:
+        with stream.alternative():
+            return (
+                int(stream.expect("number").value),
+                int(stream.expect("number").value),
+                int(stream.expect("number").value),
+            )
+        return stream.expect("word").value  # type: ignore
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        assert [argument(stream) for _ in stream.peek_until()] == [
+            "hello",
+            "world",
+            (1, 2, 3),
+            "thing",
+        ]
+
+
+def test_choose():
+    stream = TokenStream("hello world 1 2 3 thing")
+
+    def word(stream: TokenStream) -> str:
+        return stream.expect("word").value
+
+    def triplet(stream: TokenStream) -> Tuple[int, int, int]:
+        return (
+            int(stream.expect("number").value),
+            int(stream.expect("number").value),
+            int(stream.expect("number").value),
+        )
+
+    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:  # type: ignore
+        for parser, alternative in stream.choose(word, triplet):
+            with alternative:
+                return parser(stream)
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        assert [argument(stream) for _ in stream.peek_until()] == [
+            "hello",
+            "world",
+            (1, 2, 3),
+            "thing",
+        ]
+
+
+def test_choose_append():
+    stream = TokenStream("hello world 1 2 3 thing")
+    result: List[Union[str, Tuple[int, int, int]]] = []
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        while stream.peek():
+            for argument_type, alternative in stream.choose("word", "triplet"):
+                with alternative:
+                    result.append(
+                        stream.expect("word").value
+                        if argument_type == "word"
+                        else (
+                            int(stream.expect("number").value),
+                            int(stream.expect("number").value),
+                            int(stream.expect("number").value),
+                        )
+                    )
+
+    assert result == ["hello", "world", (1, 2, 3), "thing"]
