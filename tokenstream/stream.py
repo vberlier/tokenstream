@@ -578,13 +578,32 @@ class TokenStream:
         'world'
         ';'
         ' foo'
+
+        The method will raise and error if the end of the stream is reached
+        before encountering any of the given patterns.
+
+        >>> stream = TokenStream("hello world foo")
+        >>> with stream.syntax(word=r"[a-z]+", semi=r";"):
+        ...     for token in stream.peek_until("semi"):
+        ...         stream.expect("word").value
+        Traceback (most recent call last):
+        UnexpectedEOF: Expected semi but reached end of file
+
+        If the method is called without any pattern the iterator will
+        yield tokens until the end of the stream.
+
+        >>> stream = TokenStream("hello world")
+        >>> with stream.syntax(word=r"[a-z]+"):
+        ...     print([stream.expect("word").value for _ in stream.peek_until()])
+        ['hello', 'world']
         """
         while token := self.peek():
             if token.match(*patterns):
                 next(self)
                 return
             yield token
-        raise self.emit_error(UnexpectedEOF(patterns))
+        if patterns:
+            raise self.emit_error(UnexpectedEOF(patterns))
 
     @overload
     def collect(self) -> Iterator[Token]:
