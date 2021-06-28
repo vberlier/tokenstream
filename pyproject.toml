@@ -28,7 +28,7 @@ python = "^3.8"
 black = {version = "^21.6b0", allow-prereleases = true}
 pytest = "^6.2.4"
 isort = "^5.9.1"
-python-semantic-release = "^7.16.1"
+python-semantic-release = "^7.16.2"
 mudkip = "^0.4.9"
 
 [tool.black]
