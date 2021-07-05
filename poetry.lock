@@ -1155,7 +1155,7 @@ yaml = ["PyYaml (>=5.2)"]
 
 [[package]]
 name = "python-semantic-release"
-version = "7.16.1"
+version = "7.16.2"
 description = "Automatic Semantic Versioning for Python projects"
 category = "dev"
 optional = false
@@ -1174,9 +1174,10 @@ tomlkit = "0.7.0"
 twine = ">=3,<4"
 
 [package.extras]
-dev = ["mypy", "tox", "isort", "black"]
+dev = ["tox", "isort", "black"]
 docs = ["Sphinx (==1.3.6)"]
-test = ["coverage (>=5,<6)", "pytest (>=5,<6)", "pytest-xdist (>=1,<2)", "pytest-mock (>=2,<3)", "responses (==0.5.0)", "mock (==1.3.0)"]
+mypy = ["mypy", "types-requests"]
+test = ["coverage (>=5,<6)", "pytest (>=5,<6)", "pytest-xdist (>=1,<2)", "pytest-mock (>=2,<3)", "responses (==0.13.3)", "mock (==1.3.0)"]
 
 [[package]]
 name = "pytz"
@@ -1711,7 +1712,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "34d547d15436e9429a7c74998d4f848fe01118e9b4e530d3e51af485e2bfda91"
+content-hash = "ab9177c81ff7e46b5823b6d02ad331ec0ee354a9449a628b5e6e0b227747ed5b"
 
 [metadata.files]
 alabaster = [
@@ -2169,8 +2170,8 @@ python-gitlab = [
     {file = "python_gitlab-2.8.0-py3-none-any.whl", hash = "sha256:50ad46e29b664ddc4fc95141af2cf0c7c5f4ee6906f9c02cc3d6eda036aa65fe"},
 ]
 python-semantic-release = [
-    {file = "python-semantic-release-7.16.1.tar.gz", hash = "sha256:78875764c08bf6b8c76e2c4f1764c27c12f7a64f95515109d61dc56eed001876"},
-    {file = "python_semantic_release-7.16.1-py3-none-any.whl", hash = "sha256:f981005f168b2a985ec726eae8fda2c5629f35a69f331e848a8b91316b51ee0e"},
+    {file = "python-semantic-release-7.16.2.tar.gz", hash = "sha256:b0679f5ca5ef860bcf07836949e0956bffa965197315b01c6e089467c144c674"},
+    {file = "python_semantic_release-7.16.2-py3-none-any.whl", hash = "sha256:c54aca1d2d5121608f5152975b6cbc4f3cfd1e5d9d64293ad44aa4b62acc670d"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
