@@ -17,6 +17,8 @@ def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
         pattern if isinstance(pattern, str) else f"{pattern[0]} {pattern[1]!r}"
         for pattern in patterns
     ]
+    if not token_types:
+        return "nothing"
     if len(token_types) == 1:
         return token_types[0]
     *head, before_last, last = token_types
