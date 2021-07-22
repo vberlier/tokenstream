@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.1 (2021-07-22)
+### Fix
+* Handle pattern explanation with no pattern ([`1de098b`](https://github.com/vberlier/tokenstream/commit/1de098b069315cb56670739238f133020fd5fd3c))
+
 ## v0.6.0 (2021-07-22)
 ### Feature
 * Add arbitrary user data ([`105553f`](https://github.com/vberlier/tokenstream/commit/105553f073a03ccee25eb2330f6d69459279802b))
