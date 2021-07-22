@@ -115,6 +115,9 @@ class TokenStream:
         A set of token types that the stream skips over when iterating, peeking,
         and expecting tokens.
 
+    data
+        A dictionary holding arbitrary user data.
+
     regex_cache
         A cache that keeps a reference to the compiled regular expression associated
         to each set of syntax rules.
@@ -133,6 +136,8 @@ class TokenStream:
 
     generator: Iterator[Token] = extra_field()
     ignored_tokens: Set[str] = extra_field()
+
+    data: Dict[str, Any] = extra_field(default_factory=dict)
 
     regex_cache: ClassVar[Dict[SyntaxRules, "re.Pattern[str]"]] = {}
 
@@ -913,3 +918,29 @@ class TokenStream:
             yield arg, nullcontext() if i == len(args) - 1 else alternative()
             if should_break:
                 break
+
+    @contextmanager
+    def provide(self, **data: Any):
+        """Provide arbitrary user data.
+
+        >>> stream = TokenStream("hello world")
+        >>> with stream.provide(foo=123):
+        ...     stream.data["foo"]
+        123
+        """
+        to_restore: Dict[str, Any] = {}
+        to_remove: Set[str] = set()
+
+        for key, value in data.items():
+            if key in self.data:
+                to_restore[key] = self.data[key]
+            else:
+                to_remove.add(key)
+            self.data[key] = value
+
+        try:
+            yield self
+        finally:
+            for key in to_remove:
+                del self.data[key]
+            self.data.update(to_restore)
