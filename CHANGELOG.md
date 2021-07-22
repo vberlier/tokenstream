@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2021-07-22)
+### Feature
+* Add arbitrary user data ([`105553f`](https://github.com/vberlier/tokenstream/commit/105553f073a03ccee25eb2330f6d69459279802b))
+
 ## v0.5.0 (2021-06-24)
 ### Feature
 * Add alternative method and choose method ([`0794172`](https://github.com/vberlier/tokenstream/commit/0794172e558722bceb3353af609562520185967c))
