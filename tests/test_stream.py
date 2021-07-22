@@ -91,6 +91,12 @@ def test_ignore_comments():
         assert [token.value for token in stream] == ["hello", "world"]
 
 
+def test_whitespace():
+    stream = TokenStream("    \t  ")
+    with stream.intercept("whitespace"):
+        assert stream.expect("whitespace").value == "    \t  "
+
+
 def test_indent():
     source = """
 hello
