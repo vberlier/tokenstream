@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.2 (2021-07-23)
+### Fix
+* Don't capture newlines in whitespace tokens ([`d17783e`](https://github.com/vberlier/tokenstream/commit/d17783eb3f13ce4eb5c18ee36eb3bc92434f10a9))
+
 ## v0.6.1 (2021-07-22)
 ### Fix
 * Handle pattern explanation with no pattern ([`1de098b`](https://github.com/vberlier/tokenstream/commit/1de098b069315cb56670739238f133020fd5fd3c))
