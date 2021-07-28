@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2021-07-28)
+### Feature
+* Add stream.alternative(bool) ([`3adef70`](https://github.com/vberlier/tokenstream/commit/3adef707670c8a1cb00cca3c3d5174c1db4f0d0b))
+
 ## v0.6.2 (2021-07-23)
 ### Fix
 * Don't capture newlines in whitespace tokens ([`d17783e`](https://github.com/vberlier/tokenstream/commit/d17783eb3f13ce4eb5c18ee36eb3bc92434f10a9))

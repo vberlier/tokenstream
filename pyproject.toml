@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tokenstream"
-version = "0.6.2"
+version = "0.7.0"
 description = "A versatile token stream for handwritten parsers"
 authors = ["Valentin Berlier <berlier.v@gmail.com>"]
 license = "MIT"
