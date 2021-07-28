@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 import re
-from contextlib import contextmanager, nullcontext
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import (
     Any,
@@ -449,10 +449,18 @@ class TokenStream:
         return token
 
     def emit_error(self, exc: InvalidSyntax) -> InvalidSyntax:
-        """Raise an invalid syntax exception.
+        """Add location information to invalid syntax exceptions.
 
-        Should be considered internal. Used by various methods to add
-        location information to exceptions.
+        >>> stream = TokenStream("hello world")
+        >>> raise stream.emit_error(InvalidSyntax("foo"))
+        Traceback (most recent call last):
+        InvalidSyntax: foo
+        >>> with stream.syntax(word=r"[a-z]+"):
+        ...     stream.expect().value
+        'hello'
+        >>> exc = stream.emit_error(InvalidSyntax("foo"))
+        >>> exc.location
+        SourceLocation(pos=5, lineno=1, colno=6)
         """
         if self.index >= 0:
             exc.location = self.current.end_location
@@ -874,7 +882,7 @@ class TokenStream:
                 self.index = previous_index[0]
 
     @contextmanager
-    def alternative(self) -> Iterator[None]:
+    def alternative(self, active: bool = True) -> Iterator[None]:
         """Keep going if the code within the ``with`` statement raises a syntax error.
 
         >>> stream = TokenStream("hello world 123")
@@ -887,7 +895,20 @@ class TokenStream:
         'hello'
         'world'
         '123'
+
+        You can optionally provide a boolean to deactivate the context manager
+        dynamically.
+
+        >>> stream = TokenStream("hello world 123")
+        >>> with stream.syntax(word=r"[a-z]+", number=r"[0-9]+"):
+        ...     with stream.alternative(False):
+        ...         stream.expect("number").value
+        Traceback (most recent call last):
+        UnexpectedToken: Expected number but got word 'hello'
         """
+        if not active:
+            yield
+            return
         with self.checkpoint() as commit:
             yield
             commit()
@@ -908,14 +929,14 @@ class TokenStream:
         should_break = False
 
         @contextmanager
-        def alternative():
-            with self.alternative():
+        def alternative(active: bool):
+            with self.alternative(active):
                 nonlocal should_break
                 yield
                 should_break = True
 
         for i, arg in enumerate(args):
-            yield arg, nullcontext() if i == len(args) - 1 else alternative()
+            yield arg, alternative(i < len(args) - 1)
             if should_break:
                 break
 
