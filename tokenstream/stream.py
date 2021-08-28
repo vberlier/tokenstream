@@ -448,7 +448,7 @@ class TokenStream:
 
         return token
 
-    def emit_error(self, exc: InvalidSyntax) -> InvalidSyntax:
+    def emit_error(self, exc: T) -> T:
         """Add location information to invalid syntax exceptions.
 
         >>> stream = TokenStream("hello world")
@@ -463,9 +463,7 @@ class TokenStream:
         SourceLocation(pos=5, lineno=1, colno=6)
         """
         if self.index >= 0:
-            exc.location = self.current.end_location
-        else:
-            exc.location = SourceLocation(pos=0, lineno=1, colno=1)
+            exc.set_location(self.current.end_location)  # type: ignore
         return exc
 
     def generate_tokens(self) -> Iterator[Token]:

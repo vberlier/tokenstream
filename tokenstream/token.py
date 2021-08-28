@@ -6,9 +6,10 @@ __all__ = [
 ]
 
 
-from typing import NamedTuple, Sequence, Tuple, Union
+from typing import NamedTuple, Sequence, Tuple, TypeVar, Union
 
 TokenPattern = Union[str, Tuple[str, str]]
+T = TypeVar("T")
 
 
 def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
@@ -40,6 +41,14 @@ class SourceLocation(NamedTuple):
         """
         return f"{filename}:{self.lineno}:{self.colno}: {message}"
 
+    def with_horizontal_offset(self, offset: int) -> "SourceLocation":
+        """Create a modified source location along the horizontal axis.
+
+        >>> SourceLocation(0, 1, 1).with_horizontal_offset(41)
+        SourceLocation(pos=41, lineno=1, colno=42)
+        """
+        return SourceLocation(self.pos + offset, self.lineno, self.colno + offset)
+
 
 class Token(NamedTuple):
     """Class representing a token."""
@@ -70,3 +79,24 @@ class Token(NamedTuple):
                 if self.type == pattern[0] and self.value == pattern[1]:
                     return True
         return False
+
+    def emit_error(self, exc: T) -> T:
+        """Add location information to invalid syntax exceptions.
+
+        This works exactly like :meth:`tokenstream.stream.TokenStream.emit_error` but it
+        associates the location of the token with the syntax error instead of the
+        head of the stream.
+
+        >>> stream = TokenStream("hello world")
+        >>> with stream.syntax(word=r"[a-z]+"):
+        ...     token = stream.expect()
+        ...     exc = token.emit_error(InvalidSyntax("goodbye"))
+        ...     raise exc
+        Traceback (most recent call last):
+        InvalidSyntax: goodbye
+        >>> exc.location
+        SourceLocation(pos=0, lineno=1, colno=1)
+        >>> exc.end_location
+        SourceLocation(pos=5, lineno=1, colno=6)
+        """
+        return exc.set_location(self.location, self.end_location)  # type: ignore
