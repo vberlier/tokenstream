@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2021-08-28)
+### Fix
+* Make it possible to emit errors from tokens ([`b97ab2d`](https://github.com/vberlier/tokenstream/commit/b97ab2d4913c2f0410251ab0cbb817f5082a61df))
+
 ## v0.7.0 (2021-07-28)
 ### Feature
 * Add stream.alternative(bool) ([`3adef70`](https://github.com/vberlier/tokenstream/commit/3adef707670c8a1cb00cca3c3d5174c1db4f0d0b))
