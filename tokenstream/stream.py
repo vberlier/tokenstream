@@ -376,6 +376,8 @@ class TokenStream:
 
         Can only be accessed if the stream started extracting tokens.
         """
+        if self.index < 0:
+            raise IndexError("Token index out of range.")
         return self.tokens[self.index]
 
     @property
@@ -385,6 +387,8 @@ class TokenStream:
         This is the token extracted immediately before the current one, so
         it's not affected by the :meth:`ignore` method.
         """
+        if self.index <= 0:
+            raise IndexError("Token index out of range.")
         return self.tokens[self.index - 1]
 
     @property
