@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.2 (2021-08-29)
+### Fix
+* Raise IndexError for negative indices for current and previous tokens ([`7b5010b`](https://github.com/vberlier/tokenstream/commit/7b5010bfb801ee1e72d1a16a039aa2ff9ab7d1b9))
+
 ## v0.7.1 (2021-08-28)
 ### Fix
 * Make it possible to emit errors from tokens ([`b97ab2d`](https://github.com/vberlier/tokenstream/commit/b97ab2d4913c2f0410251ab0cbb817f5082a61df))
