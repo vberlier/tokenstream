@@ -183,10 +183,12 @@ class TokenStream:
         Mostly used to ensure consistency in some of the provided context managers.
         Should be considered internal.
         """
-        if self.index + 1 < len(self.tokens):
-            self.tokens = self.tokens[: self.index + 1]
-        if self.index >= 0:
-            self.location = self.current.end_location
+        del self.tokens[self.index + 1 :]
+        self.location = (
+            self.current.end_location
+            if self.index >= 0
+            else SourceLocation(pos=0, lineno=1, colno=1)
+        )
 
     @contextmanager
     def syntax(self, **kwargs: str) -> Iterator[None]:
@@ -216,6 +218,8 @@ class TokenStream:
         '123'
         """
         previous_syntax = self.syntax_rules
+        previous_regex = self.regex
+
         self.syntax_rules = tuple(kwargs.items()) + tuple(
             (k, v) for k, v in previous_syntax if k not in kwargs
         )
@@ -231,6 +235,8 @@ class TokenStream:
             yield
         finally:
             self.syntax_rules = previous_syntax
+            self.regex = previous_regex
+            self.crop()
 
     @contextmanager
     def reset_syntax(self, **kwargs: str) -> Iterator[None]:
