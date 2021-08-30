@@ -23,6 +23,9 @@ def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
     if len(token_types) == 1:
         return token_types[0]
     *head, before_last, last = token_types
+    if len(head) > 6:
+        *head, before_last = head[:6]
+        last = f"{len(token_types) - 6} other tokens"
     return ", ".join(head + [f"{before_last} or {last}"])
 
 
