@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-__version__ = "0.7.2"
+__version__ = "0.7.3"
 
 from .error import *
 from .stream import *
