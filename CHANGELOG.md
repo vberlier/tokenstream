@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.4 (2021-08-30)
+### Fix
+* Tweak pattern explanation when there are a lot of token types ([`0a9e007`](https://github.com/vberlier/tokenstream/commit/0a9e007ea77095e040f87c9c0c61539b3245e7a1))
+
 ## v0.7.3 (2021-08-30)
 ### Fix
 * Properly restore previous regex when syntax changes ([`aeae860`](https://github.com/vberlier/tokenstream/commit/aeae860707149ec6bd1e2d730dd613cf097c231d))
