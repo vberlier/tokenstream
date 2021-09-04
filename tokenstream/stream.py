@@ -935,13 +935,41 @@ class TokenStream:
         '123'
         """
         should_break = False
+        exceptions: List[InvalidSyntax] = []
 
         @contextmanager
         def alternative(active: bool):
             with self.alternative(active):
-                nonlocal should_break
-                yield
-                should_break = True
+                nonlocal should_break, exceptions
+
+                try:
+                    yield
+                    should_break = True
+
+                except InvalidSyntax as exc:
+                    if not exceptions:
+                        exceptions.append(exc)
+
+                    first, *other_exceptions = exceptions
+
+                    if exc.location == first.location:
+                        exceptions.append(exc)
+                    elif exc.location > first.location:
+                        exceptions = [exc]
+
+                    if isinstance(first, UnexpectedToken):
+                        patterns = list(first.expected_patterns)
+
+                        for exc in other_exceptions:
+                            if isinstance(exc, UnexpectedToken):
+                                patterns.extend(exc.expected_patterns)
+
+                        raise UnexpectedToken(first.token, patterns).set_location(
+                            first.location,
+                            first.end_location,
+                        ) from None
+                    else:
+                        raise first from None
 
         for i, arg in enumerate(args):
             yield arg, alternative(i < len(args) - 1)
