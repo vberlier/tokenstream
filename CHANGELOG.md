@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.5 (2021-09-04)
+### Fix
+* Combine unexpected token patterns when using the choose() method ([`b8665e8`](https://github.com/vberlier/tokenstream/commit/b8665e8b10e451467e2dae1659e9c999213aa348))
+
 ## v0.7.4 (2021-08-30)
 ### Fix
 * Tweak pattern explanation when there are a lot of token types ([`0a9e007`](https://github.com/vberlier/tokenstream/commit/0a9e007ea77095e040f87c9c0c61539b3245e7a1))
