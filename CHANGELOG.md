@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.0 (2021-09-08)
+### Feature
+* Move SourceLocation into its own module ([`95aabae`](https://github.com/vberlier/tokenstream/commit/95aabae6058bb3c13bbd4f15a372d480f94a22b2))
+
+### Breaking
+* remove InvalidSyntax.set_location in favor of the general-purpose setlocation function  ([`95aabae`](https://github.com/vberlier/tokenstream/commit/95aabae6058bb3c13bbd4f15a372d480f94a22b2))
+
 ## v0.7.5 (2021-09-04)
 ### Fix
 * Combine unexpected token patterns when using the choose() method ([`b8665e8`](https://github.com/vberlier/tokenstream/commit/b8665e8b10e451467e2dae1659e9c999213aa348))
