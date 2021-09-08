@@ -6,7 +6,7 @@ __all__ = [
 
 
 from dataclasses import FrozenInstanceError, replace
-from typing import Any, NamedTuple, TypeVar, overload
+from typing import Any, NamedTuple, TypeVar
 
 T = TypeVar("T")
 
@@ -48,24 +48,10 @@ class SourceLocation(NamedTuple):
 UNKNOWN_LOCATION = SourceLocation(pos=-1, lineno=0, colno=0)
 
 
-@overload
-def set_location(
-    obj: T,
-    location: SourceLocation = UNKNOWN_LOCATION,
-    end_location: SourceLocation = UNKNOWN_LOCATION,
-) -> T:
-    ...
-
-
-@overload
-def set_location(obj: T, location: Any) -> T:
-    ...
-
-
 def set_location(
     obj: T,
     location: Any = UNKNOWN_LOCATION,
-    end_location: SourceLocation = UNKNOWN_LOCATION,
+    end_location: Any = UNKNOWN_LOCATION,
 ) -> T:
     """Set the location and end_location attributes.
 
@@ -84,8 +70,12 @@ def set_location(
     >>> set_location(token, updated_token)
     Token(type='number', value='123', location=SourceLocation(pos=15, lineno=6, colno=1), end_location=SourceLocation(pos=18, lineno=6, colno=4))
     """
+    if not isinstance(end_location, SourceLocation):
+        end_location = getattr(end_location, "end_location", UNKNOWN_LOCATION)
+
     if not isinstance(location, SourceLocation):
-        end_location = getattr(location, "end_location", UNKNOWN_LOCATION)
+        if end_location.unknown:
+            end_location = getattr(location, "end_location", UNKNOWN_LOCATION)
         location = getattr(location, "location", UNKNOWN_LOCATION)
 
     if location.unknown:
