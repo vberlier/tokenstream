@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.1 (2021-09-08)
+### Fix
+* Handle non SourceLocation end_location in set_location ([`f16b378`](https://github.com/vberlier/tokenstream/commit/f16b378fbdc52942bcf14a8d4b41d34158d867d7))
+
 ## v1.0.0 (2021-09-08)
 ### Feature
 * Move SourceLocation into its own module ([`95aabae`](https://github.com/vberlier/tokenstream/commit/95aabae6058bb3c13bbd4f15a372d480f94a22b2))
