@@ -1,15 +1,18 @@
 __all__ = [
     "Token",
     "TokenPattern",
-    "SourceLocation",
     "explain_patterns",
 ]
 
 
 from typing import NamedTuple, Sequence, Tuple, TypeVar, Union
 
-TokenPattern = Union[str, Tuple[str, str]]
+from .location import SourceLocation, set_location
+
 T = TypeVar("T")
+
+
+TokenPattern = Union[str, Tuple[str, str]]
 
 
 def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
@@ -27,30 +30,6 @@ def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
         *head, before_last = head[:6]
         last = f"{len(token_types) - 6} other tokens"
     return ", ".join(head + [f"{before_last} or {last}"])
-
-
-class SourceLocation(NamedTuple):
-    """Class representing a location within an input string."""
-
-    pos: int
-    lineno: int
-    colno: int
-
-    def format(self, filename: str, message: str) -> str:
-        """Return a message formatted with the given filename and the current location.
-
-        >>> SourceLocation(42, 3, 12).format("path/to/file.txt", "Some error message")
-        'path/to/file.txt:3:12: Some error message'
-        """
-        return f"{filename}:{self.lineno}:{self.colno}: {message}"
-
-    def with_horizontal_offset(self, offset: int) -> "SourceLocation":
-        """Create a modified source location along the horizontal axis.
-
-        >>> SourceLocation(0, 1, 1).with_horizontal_offset(41)
-        SourceLocation(pos=41, lineno=1, colno=42)
-        """
-        return SourceLocation(self.pos + offset, self.lineno, self.colno + offset)
 
 
 class Token(NamedTuple):
@@ -102,4 +81,4 @@ class Token(NamedTuple):
         >>> exc.end_location
         SourceLocation(pos=5, lineno=1, colno=6)
         """
-        return exc.set_location(self.location, self.end_location)  # type: ignore
+        return set_location(exc, self)

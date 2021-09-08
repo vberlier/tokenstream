@@ -5,9 +5,10 @@ __all__ = [
 ]
 
 
-from typing import Optional, Sequence
+from typing import Sequence
 
-from .token import SourceLocation, Token, TokenPattern, explain_patterns
+from .location import SourceLocation
+from .token import Token, TokenPattern, explain_patterns
 
 
 class InvalidSyntax(Exception):
@@ -26,16 +27,6 @@ class InvalidSyntax(Exception):
         super().__init__(*args)
         self.location = SourceLocation(0, 1, 1)
         self.end_location = SourceLocation(0, 1, 1)
-
-    def set_location(
-        self,
-        location: SourceLocation,
-        end_location: Optional[SourceLocation] = None,
-    ) -> "InvalidSyntax":
-        """Set the location of the syntax error."""
-        self.location = location
-        self.end_location = end_location or location
-        return self
 
     def format(self, filename: str) -> str:
         """Return a string representing the error and its location in a given file.

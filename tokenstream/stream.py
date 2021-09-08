@@ -24,7 +24,8 @@ from typing import (
 )
 
 from .error import InvalidSyntax, UnexpectedEOF, UnexpectedToken
-from .token import SourceLocation, Token, TokenPattern
+from .location import SourceLocation, set_location
+from .token import Token, TokenPattern
 
 T = TypeVar("T")
 
@@ -472,9 +473,10 @@ class TokenStream:
         >>> exc.location
         SourceLocation(pos=5, lineno=1, colno=6)
         """
-        if self.index >= 0:
-            exc.set_location(self.current.end_location)  # type: ignore
-        return exc
+        return set_location(
+            exc,
+            self.current.end_location if self.index >= 0 else SourceLocation(0, 1, 1),
+        )
 
     def generate_tokens(self) -> Iterator[Token]:
         """Extract tokens from the input string.
@@ -964,10 +966,8 @@ class TokenStream:
                             if isinstance(exc, UnexpectedToken):
                                 patterns.extend(exc.expected_patterns)
 
-                        raise UnexpectedToken(first.token, patterns).set_location(
-                            first.location,
-                            first.end_location,
-                        ) from None
+                        exc = UnexpectedToken(first.token, patterns)
+                        raise set_location(exc, first) from None
                     else:
                         raise first from None
 

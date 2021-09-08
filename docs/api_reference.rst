@@ -15,8 +15,13 @@ Token
 .. autoclass:: tokenstream.token.Token
     :members:
 
-.. autoclass:: tokenstream.token.SourceLocation
+Location
+--------
+
+.. autoclass:: tokenstream.location.SourceLocation
     :members:
+
+.. autofunction:: tokenstream.location.set_location
 
 Exceptions
 ----------

@@ -4,6 +4,8 @@ __all__ = [
     "TokenPattern",
     "SourceLocation",
     "explain_patterns",
+    "set_location",
+    "UNKNOWN_LOCATION",
     "InvalidSyntax",
     "UnexpectedEOF",
     "UnexpectedToken",
@@ -13,5 +15,6 @@ __all__ = [
 __version__ = "0.7.5"
 
 from .error import *
+from .location import *
 from .stream import *
 from .token import *
