@@ -29,7 +29,7 @@ black = "^21.8b0"
 pytest = "^6.2.5"
 isort = "^5.9.3"
 python-semantic-release = "^7.19.2"
-mudkip = "^0.4.10"
+mudkip = "^0.4.11"
 
 [tool.black]
 target-version = ["py38"]
