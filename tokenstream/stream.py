@@ -316,8 +316,7 @@ class TokenStream:
         self.indentation = [0] if enable else []
 
         previous_skip = self.indentation_skip
-        if skip is not None:
-            self.indentation_skip = set(skip)
+        self.indentation_skip = set(skip if skip is not None else []) | {"newline"}
 
         self.crop()
 
@@ -485,6 +484,13 @@ class TokenStream:
         Should be considered internal. This is the underlying generator being driven
         by the stream.
         """
+
+        def emit_dedent(level: int = 0) -> Iterator[Token]:
+            while self.indentation and level < self.indentation[-1]:
+                self.emit_token("dedent")
+                self.indentation.pop()
+                yield self.current
+
         while self.location.pos < len(self.source):
             match = self.regex.match(self.source, self.location.pos)
 
@@ -497,31 +503,21 @@ class TokenStream:
                     and self.current.location.colno == 1
                     and match.lastgroup not in self.indentation_skip
                 ):
-                    indent = len(self.current.value.expandtabs())
+                    level = len(self.current.value.expandtabs())
+                    yield from emit_dedent(level)
 
-                    while indent < self.indentation[-1]:
-                        self.emit_token("dedent")
-                        self.indentation.pop()
-                        yield self.current
-
-                    if indent > self.indentation[-1]:
+                    if level > self.indentation[-1]:
                         self.emit_token("indent")
-                        self.indentation.append(indent)
+                        self.indentation.append(level)
                         yield self.current
 
                 elif self.current.type == "newline" and match.lastgroup != "whitespace":
-                    while len(self.indentation) > 1:
-                        self.emit_token("dedent")
-                        self.indentation.pop()
-                        yield self.current
+                    yield from emit_dedent()
 
             self.emit_token(match.lastgroup, match.group())
             yield self.current
 
-        while len(self.indentation) > 1:
-            self.emit_token("dedent")
-            self.indentation.pop()
-            yield self.current
+        yield from emit_dedent()
 
         self.emit_token("eof")
         yield self.current

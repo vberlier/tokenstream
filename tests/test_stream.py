@@ -143,6 +143,15 @@ thing
         stream.expect("word")
 
 
+def test_indent_whitespace():
+    source = "hello\n    \nworld"
+    stream = TokenStream(source)
+
+    with stream.syntax(word=r"\w+"), stream.indent():
+        stream.expect("word")
+        stream.expect("word")
+
+
 def test_checkpoint():
     stream = TokenStream("hello world")
 
