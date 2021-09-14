@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.2 (2021-09-14)
+### Fix
+* Don't detect indent when the line is blank ([`175e02e`](https://github.com/vberlier/tokenstream/commit/175e02eadb75d027199f268edbede774632ab34c))
+* Properly handle full dedent ([`04b9dab`](https://github.com/vberlier/tokenstream/commit/04b9dab09bf32cb368a60a009650689e7cf24145))
+* Add eof and invalid tokens ([`264a398`](https://github.com/vberlier/tokenstream/commit/264a398ad4e55e89e0bfb503db2af98b38492d00))
+
 ## v1.0.1 (2021-09-08)
 ### Fix
 * Handle non SourceLocation end_location in set_location ([`f16b378`](https://github.com/vberlier/tokenstream/commit/f16b378fbdc52942bcf14a8d4b41d34158d867d7))
