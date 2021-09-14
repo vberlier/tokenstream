@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.3 (2021-09-14)
+### Fix
+* Don't show token value if it's empty ([`6337bfd`](https://github.com/vberlier/tokenstream/commit/6337bfd35f0f51996cfae15174fe4f1b1428b7f2))
+
 ## v1.0.2 (2021-09-14)
 ### Fix
 * Don't detect indent when the line is blank ([`175e02e`](https://github.com/vberlier/tokenstream/commit/175e02eadb75d027199f268edbede774632ab34c))
