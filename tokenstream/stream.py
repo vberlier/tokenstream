@@ -254,7 +254,7 @@ class TokenStream:
         ...         stream.expect("word").value
         ...         stream.expect("number").value
         Traceback (most recent call last):
-        UnexpectedToken: Expected word but got invalid 'hello world 123'
+        UnexpectedToken: Expected word but got invalid 'hello world 123'.
         """
         previous_syntax = self.syntax_rules
         self.syntax_rules = ()
@@ -620,7 +620,7 @@ class TokenStream:
         ...     for token in stream.peek_until("semi"):
         ...         stream.expect("word").value
         Traceback (most recent call last):
-        UnexpectedEOF: Expected semi but reached end of file
+        UnexpectedEOF: Expected semi but reached end of file.
 
         If the method is called without any pattern the iterator will
         yield tokens until the end of the stream.
@@ -696,7 +696,7 @@ class TokenStream:
         ...     for token in stream.collect():
         ...         token
         Traceback (most recent call last):
-        UnexpectedToken: Expected anything but got invalid 'foo'
+        UnexpectedToken: Expected anything but got invalid 'foo'.
 
         When you iterate over the stream directly the tokens are unfiltered.
 
@@ -788,7 +788,7 @@ class TokenStream:
         >>> with stream.syntax(word=r"[a-z]+", number=r"[0-9]+"):
         ...     stream.expect("number").value
         Traceback (most recent call last):
-        UnexpectedToken: Expected number but got word 'hello'
+        UnexpectedToken: Expected number but got word 'hello'.
 
         The method will also raise and exception if the stream ended.
 
@@ -798,7 +798,7 @@ class TokenStream:
         ...     stream.expect("word").value
         ...     stream.expect("word").value
         Traceback (most recent call last):
-        UnexpectedEOF: Expected word but reached end of file
+        UnexpectedEOF: Expected word but reached end of file.
 
         The method works a bit like :meth:`collect` and lets you know which pattern
         matched the extracted token if you provide more than one pattern.
@@ -879,7 +879,7 @@ class TokenStream:
         '123'
         >>> stream.expect_eof()
         Traceback (most recent call last):
-        UnexpectedToken: Expected eof but got invalid 'foo'
+        UnexpectedToken: Expected eof but got invalid 'foo'.
         """
         with self.intercept("eof"):
             self.expect("eof")
@@ -944,7 +944,7 @@ class TokenStream:
         ...     with stream.alternative(False):
         ...         stream.expect("number").value
         Traceback (most recent call last):
-        UnexpectedToken: Expected number but got word 'hello'
+        UnexpectedToken: Expected number but got word 'hello'.
         """
         if not active:
             yield
