@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.4 (2021-09-14)
+### Fix
+* Add period to all error messages ([`c1c32b0`](https://github.com/vberlier/tokenstream/commit/c1c32b02732b66ac4080585f1360bfc429c7f0e2))
+
 ## v1.0.3 (2021-09-14)
 ### Fix
 * Don't show token value if it's empty ([`6337bfd`](https://github.com/vberlier/tokenstream/commit/6337bfd35f0f51996cfae15174fe4f1b1428b7f2))
