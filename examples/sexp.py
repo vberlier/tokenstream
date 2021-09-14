@@ -10,7 +10,7 @@ Example usage:
     $ python sexp.py '(foo (bar) thing 9 hello 9)'
     ['foo', ['bar'], 'thing', 9, 'hello', 9]
     $ python sexp.py '(hello world'
-    UnexpectedEOF: Expected brace ')' but reached end of file
+    UnexpectedEOF: Expected brace ')' but reached end of file.
 """
 
 

@@ -12,7 +12,7 @@ Example usage:
     > {"this": "\"that\""}
     {'this': '"that"'}
     > [}
-    UnexpectedToken: Expected curly '{', bracket '[', string or number but got curly '}'
+    UnexpectedToken: Expected curly '{', bracket '[', string or number but got curly '}'.
 """
 
 
