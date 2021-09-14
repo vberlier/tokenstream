@@ -72,7 +72,7 @@ class TokenStream:
         >>> stream = TokenStream("hello world")
         >>> with stream.syntax(word=r"[a-z]+"):
         ...     print(stream.regex.pattern)
-        (?P<word>[a-z]+)|(?P<newline>\n)|(?P<whitespace>[ \t]+)
+        (?P<word>[a-z]+)|(?P<newline>\n)|(?P<whitespace>[ \t]+)|(?P<invalid>.+)
 
     location
         Tracks the position of the next token to extract in the input string.
@@ -146,7 +146,7 @@ class TokenStream:
         self.bake_regex()
         self.location = SourceLocation(pos=0, lineno=1, colno=1)
         self.generator = self.generate_tokens()
-        self.ignored_tokens = {"whitespace", "newline"}
+        self.ignored_tokens = {"whitespace", "newline", "eof"}
 
     def bake_regex(self) -> None:
         """Compile the syntax rules.
@@ -161,6 +161,7 @@ class TokenStream:
                 + (
                     ("newline", r"\n"),
                     ("whitespace", r"[ \t]+"),
+                    ("invalid", r".+"),
                 )
             ),
             re.MULTILINE,
@@ -253,7 +254,7 @@ class TokenStream:
         ...         stream.expect("word").value
         ...         stream.expect("number").value
         Traceback (most recent call last):
-        InvalidSyntax: hello world 123
+        UnexpectedToken: Expected word but got invalid 'hello world 123'
         """
         previous_syntax = self.syntax_rules
         self.syntax_rules = ()
@@ -485,37 +486,40 @@ class TokenStream:
         by the stream.
         """
         while self.location.pos < len(self.source):
-            if match := self.regex.match(self.source, self.location.pos):
-                assert match.lastgroup
+            match = self.regex.match(self.source, self.location.pos)
 
-                if (
-                    self.tokens
-                    and self.indentation
-                    and self.current.type == "whitespace"
-                    and self.current.location.colno == 1
-                    and match.lastgroup not in self.indentation_skip
-                ):
-                    indent = len(self.current.value.expandtabs())
+            assert match
+            assert match.lastgroup
 
-                    while indent < self.indentation[-1]:
-                        self.emit_token("dedent")
-                        self.indentation.pop()
-                        yield self.current
+            if (
+                self.tokens
+                and self.indentation
+                and self.current.type == "whitespace"
+                and self.current.location.colno == 1
+                and match.lastgroup not in self.indentation_skip
+            ):
+                indent = len(self.current.value.expandtabs())
 
-                    if indent > self.indentation[-1]:
-                        self.emit_token("indent")
-                        self.indentation.append(indent)
-                        yield self.current
+                while indent < self.indentation[-1]:
+                    self.emit_token("dedent")
+                    self.indentation.pop()
+                    yield self.current
 
-                self.emit_token(match.lastgroup, match.group())
-                yield self.current
-            else:
-                raise self.emit_error(InvalidSyntax(self.head()))
+                if indent > self.indentation[-1]:
+                    self.emit_token("indent")
+                    self.indentation.append(indent)
+                    yield self.current
+
+            self.emit_token(match.lastgroup, match.group())
+            yield self.current
 
         while len(self.indentation) > 1:
             self.emit_token("dedent")
             self.indentation.pop()
             yield self.current
+
+        self.emit_token("eof")
+        yield self.current
 
     def __iter__(self) -> "TokenStream":
         return self
@@ -653,7 +657,7 @@ class TokenStream:
     def collect(self, *patterns: TokenPattern) -> Iterator[Any]:
         """Collect tokens matching the given patterns.
 
-        Calling the method without any arguments is identical to iterating over the
+        Calling the method without any arguments is similar to iterating over the
         stream directly. If you provide one or more arguments the iterator
         will stop if it encounters a token that doesn't match any of the given
         patterns.
@@ -681,9 +685,32 @@ class TokenStream:
         word hello
         word world
         number 123
+
+        There is one small difference between iterating over the stream directly and
+        using the method without any argument. The :meth:`collect` method will raise
+        an exception if it encounters an invalid token.
+
+        >>> stream = TokenStream("foo")
+        >>> with stream.syntax(number=r"[0-9]+"):
+        ...     for token in stream.collect():
+        ...         token
+        Traceback (most recent call last):
+        UnexpectedToken: Expected anything but got invalid 'foo'
+
+        When you iterate over the stream directly the tokens are unfiltered.
+
+        >>> stream = TokenStream("foo")
+        >>> with stream.syntax(number=r"[0-9]+"):
+        ...     for token in stream:
+        ...         token
+        Token(type='invalid', value='foo', ...)
+
         """
         if not patterns:
-            yield from self
+            for token in self:
+                if token.match("invalid"):
+                    raise UnexpectedToken(token, patterns)
+                yield token
             return
 
         while token := self.peek():
@@ -714,10 +741,13 @@ class TokenStream:
                     case Token(type="number"):
                         print("number", token.value)
         """
-        while token := self.peek():
-            if not token.match(*patterns):
-                break
-            yield next(self)
+        if not patterns:
+            yield from self.collect()
+        elif len(patterns) == 1:
+            yield from self.collect(patterns[0])
+        else:
+            for matches in self.collect(patterns[0], patterns[1], *patterns[2:]):
+                yield next(filter(None, matches))
 
     @overload
     def expect(self) -> Token:
@@ -809,9 +839,8 @@ class TokenStream:
         '123'
         True
         """
-        if token := self.peek():
-            if token.match(*patterns):
-                return next(self)
+        for result in self.collect(*patterns):
+            return result
         return None
 
     def expect_any(self, *patterns: TokenPattern) -> Token:
@@ -828,13 +857,13 @@ class TokenStream:
                 case Token(type="number") as number:
                     print("number", number.value)
         """
-        if token := self.peek():
-            if token.match(*patterns):
-                return next(self)
-            else:
-                raise self.emit_error(UnexpectedToken(token, patterns))
+        if not patterns:
+            return self.expect()
+        elif len(patterns) == 1:
+            return self.expect(patterns[0])
         else:
-            raise self.emit_error(UnexpectedEOF(patterns))
+            matches = self.expect(patterns[0], patterns[1], *patterns[2:])
+            return next(filter(None, matches))
 
     def expect_eof(self) -> None:
         """Raise an exception if there is leftover input.
@@ -849,10 +878,10 @@ class TokenStream:
         '123'
         >>> stream.expect_eof()
         Traceback (most recent call last):
-        InvalidSyntax: foo
+        UnexpectedToken: Expected eof but got invalid 'foo'
         """
-        if self.peek():
-            raise self.emit_error(InvalidSyntax(self.head()))
+        with self.intercept("eof"):
+            self.expect("eof")
 
     @contextmanager
     def checkpoint(self) -> Iterator[CheckpointCommit]:

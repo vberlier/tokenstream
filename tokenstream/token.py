@@ -22,7 +22,7 @@ def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
         for pattern in patterns
     ]
     if not token_types:
-        return "nothing"
+        return "anything"
     if len(token_types) == 1:
         return token_types[0]
     *head, before_last, last = token_types

@@ -69,7 +69,7 @@ def test_reject_whitespace():
     stream = TokenStream("hello world")
 
     with stream.syntax(word=r"\w+"), stream.intercept("whitespace", "newline"):
-        assert len(stream.ignored_tokens) == 0
+        assert stream.ignored_tokens == {"eof"}
 
         stream.expect("word").value
         with pytest.raises(  # type: ignore

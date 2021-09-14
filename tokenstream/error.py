@@ -35,7 +35,7 @@ class InvalidSyntax(Exception):
         ...     TokenStream("hello").expect()
         ... except InvalidSyntax as exc:
         ...     print(exc.format("path/to/my_file.txt"))
-        path/to/my_file.txt:1:1: hello
+        path/to/my_file.txt:1:1: Expected anything but got invalid 'hello'
         """
         return self.location.format(filename, str(self))
 
@@ -81,4 +81,9 @@ class UnexpectedToken(InvalidSyntax):
         self.expected_patterns = expected_patterns
 
     def __str__(self) -> str:
-        return f"Expected {explain_patterns(self.expected_patterns)} but got {self.token.type} {self.token.value!r}"
+        value = (
+            self.token.value[:30] + "..."
+            if len(self.token.value) > 32
+            else self.token.value
+        )
+        return f"Expected {explain_patterns(self.expected_patterns)} but got {self.token.type} {value!r}"
