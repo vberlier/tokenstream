@@ -491,24 +491,29 @@ class TokenStream:
             assert match
             assert match.lastgroup
 
-            if (
-                self.tokens
-                and self.indentation
-                and self.current.type == "whitespace"
-                and self.current.location.colno == 1
-                and match.lastgroup not in self.indentation_skip
-            ):
-                indent = len(self.current.value.expandtabs())
+            if self.tokens and self.indentation:
+                if (
+                    self.current.type == "whitespace"
+                    and self.current.location.colno == 1
+                    and match.lastgroup not in self.indentation_skip
+                ):
+                    indent = len(self.current.value.expandtabs())
 
-                while indent < self.indentation[-1]:
-                    self.emit_token("dedent")
-                    self.indentation.pop()
-                    yield self.current
+                    while indent < self.indentation[-1]:
+                        self.emit_token("dedent")
+                        self.indentation.pop()
+                        yield self.current
 
-                if indent > self.indentation[-1]:
-                    self.emit_token("indent")
-                    self.indentation.append(indent)
-                    yield self.current
+                    if indent > self.indentation[-1]:
+                        self.emit_token("indent")
+                        self.indentation.append(indent)
+                        yield self.current
+
+                elif self.current.type == "newline" and match.lastgroup != "whitespace":
+                    while len(self.indentation) > 1:
+                        self.emit_token("dedent")
+                        self.indentation.pop()
+                        yield self.current
 
             self.emit_token(match.lastgroup, match.group())
             yield self.current
