@@ -232,8 +232,7 @@ class TokenStream:
         previous_regex = self.regex
 
         for key, value in previous_syntax:
-            if key not in kwargs:
-                kwargs[key] = value
+            kwargs.setdefault(key, value)
 
         self.syntax_rules = tuple(
             (key, value) for key, value in kwargs.items() if value
