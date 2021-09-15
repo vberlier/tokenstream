@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.5 (2021-09-15)
+### Fix
+* Make it possible to use None to disable previous rules ([`66e468a`](https://github.com/vberlier/tokenstream/commit/66e468ad068a3b1c9c34f0e72b63df38b7710a81))
+
 ## v1.0.4 (2021-09-14)
 ### Fix
 * Add period to all error messages ([`c1c32b0`](https://github.com/vberlier/tokenstream/commit/c1c32b02732b66ac4080585f1360bfc429c7f0e2))
