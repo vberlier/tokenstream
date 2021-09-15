@@ -193,7 +193,7 @@ class TokenStream:
         )
 
     @contextmanager
-    def syntax(self, **kwargs: str) -> Iterator[None]:
+    def syntax(self, **kwargs: Optional[str]) -> Iterator[None]:
         """Extend token syntax using regular expressions.
 
         The keyword arguments associate regular expression patterns to token types. The method returns a context manager during which the specified tokens will be recognized.
@@ -218,12 +218,25 @@ class TokenStream:
         'hello'
         'world'
         '123'
+
+        You can also disable a previous rule by using ``None``.
+
+        >>> stream = TokenStream("hello world 123")
+        >>> with stream.syntax(word=r"[a-z]+"):
+        ...     with stream.syntax(number=r"[0-9]+", word=None):
+        ...         stream.expect("word").value
+        Traceback (most recent call last):
+        UnexpectedToken: Expected word but got invalid 'hello world 123'.
         """
         previous_syntax = self.syntax_rules
         previous_regex = self.regex
 
-        self.syntax_rules = tuple(kwargs.items()) + tuple(
-            (k, v) for k, v in previous_syntax if k not in kwargs
+        for key, value in previous_syntax:
+            if key not in kwargs:
+                kwargs[key] = value
+
+        self.syntax_rules = tuple(
+            (key, value) for key, value in kwargs.items() if value
         )
 
         if regex := self.regex_cache.get(self.syntax_rules):
