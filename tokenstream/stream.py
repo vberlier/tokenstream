@@ -1043,3 +1043,29 @@ class TokenStream:
             for key in to_remove:
                 del self.data[key]
             self.data.update(to_restore)
+
+    @contextmanager
+    def reset(self, *args: str):
+        """Temporarily reset arbitrary user data.
+
+        >>> stream = TokenStream("hello world")
+        >>> with stream.provide(foo=123):
+        ...     stream.data["foo"]
+        ...     with stream.reset("foo"):
+        ...         stream.data
+        ...     stream.data
+        123
+        {}
+        {'foo': 123}
+        """
+        to_restore: Dict[str, Any] = {}
+
+        for key in args:
+            if key in self.data:
+                to_restore[key] = self.data[key]
+                del self.data[key]
+
+        try:
+            yield self
+        finally:
+            self.data.update(to_restore)
