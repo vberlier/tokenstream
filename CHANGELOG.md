@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v1.1.0 (2021-09-16)
+### Feature
+* Add stream.reset() ([`1af0d47`](https://github.com/vberlier/tokenstream/commit/1af0d47b93082ae374ca8edef8f03f8a549e1fdb))
+
+### Fix
+* Do not register the first alternative exception twice ([`1bb7102`](https://github.com/vberlier/tokenstream/commit/1bb71027bdf126ae5c439c149b34a99eeb5973fd))
+
 ## v1.0.5 (2021-09-15)
 ### Fix
 * Make it possible to use None to disable previous rules ([`66e468a`](https://github.com/vberlier/tokenstream/commit/66e468ad068a3b1c9c34f0e72b63df38b7710a81))
