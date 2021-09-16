@@ -996,7 +996,7 @@ class TokenStream:
 
                     first, *other_exceptions = exceptions
 
-                    if exc.location == first.location:
+                    if exc.location == first.location and exc is not first:
                         exceptions.append(exc)
                     elif exc.location > first.location:
                         exceptions = [exc]
