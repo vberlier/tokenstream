@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.0 (2021-09-19)
+### Feature
+* Make it possible to know if a checkpoint was rolled back ([`0765e96`](https://github.com/vberlier/tokenstream/commit/0765e96aec93bcc6b0a60956ac509afd4f63e1c6))
+
 ## v1.1.0 (2021-09-16)
 ### Feature
 * Add stream.reset() ([`1af0d47`](https://github.com/vberlier/tokenstream/commit/1af0d47b93082ae374ca8edef8f03f8a549e1fdb))
