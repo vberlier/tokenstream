@@ -9,6 +9,9 @@ TokenStream
 .. autoclass:: tokenstream.stream.TokenStream
     :members:
 
+.. autoclass:: tokenstream.stream.CheckpointCommit
+    :members:
+
 Token
 -----
 

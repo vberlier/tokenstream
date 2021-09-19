@@ -9,7 +9,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import (
     Any,
-    Callable,
     ClassVar,
     ContextManager,
     Dict,
@@ -31,11 +30,31 @@ T = TypeVar("T")
 
 
 SyntaxRules = Tuple[Tuple[str, str], ...]
-CheckpointCommit = Callable[[], None]
 
 
 def extra_field(**kwargs: Any) -> Any:
     return field(repr=False, init=False, hash=False, compare=False, **kwargs)
+
+
+@dataclass
+class CheckpointCommit:
+    """Handle for managing checkpoints.
+
+    Attributes
+    ----------
+    index
+        The index of the stream when the checkpoint was created.
+
+    rollback
+        Whether the checkpoint should be rolled back or not. This attribute is set to
+        ``False`` when the handle is invoked as a function.
+    """
+
+    index: int
+    rollback: bool = True
+
+    def __call__(self) -> None:
+        self.rollback = False
 
 
 @dataclass
@@ -908,8 +927,9 @@ class TokenStream:
         'hello'
         'hello'
 
-        You can use the returned ``commit()`` function to keep the state of the stream
-        at the end of the ``with`` statement.
+        You can use the returned handle to keep the state of the stream
+        at the end of the ``with`` statement. For more details check out
+        :class:`CheckpointCommit`.
 
         >>> stream = TokenStream("hello world")
         >>> with stream.syntax(word=r"[a-z]+"):
@@ -920,18 +940,19 @@ class TokenStream:
         'hello'
         'world'
 
-        Checkpoints will swallow syntax errors until the ``commit()`` function is called.
+        The context manager will swallow syntax errors until the handle
+        commits the checkpoint.
         """
-        previous_index = [self.index]
+        commit = CheckpointCommit(self.index)
 
         try:
-            yield lambda: previous_index.clear()
+            yield commit
         except InvalidSyntax:
-            if not previous_index:
+            if not commit.rollback:
                 raise
         finally:
-            if previous_index:
-                self.index = previous_index[0]
+            if commit.rollback:
+                self.index = commit.index
 
     @contextmanager
     def alternative(self, active: bool = True) -> Iterator[None]:
