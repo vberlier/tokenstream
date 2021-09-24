@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.1 (2021-09-24)
+### Fix
+* With_horizontal_offset doesn't modify unkown location anymore ([`e17f897`](https://github.com/vberlier/tokenstream/commit/e17f897fec2feb53b0df3c7c62efdb0fe6c1fcd1))
+
 ## v1.2.0 (2021-09-19)
 ### Feature
 * Make it possible to know if a checkpoint was rolled back ([`0765e96`](https://github.com/vberlier/tokenstream/commit/0765e96aec93bcc6b0a60956ac509afd4f63e1c6))
