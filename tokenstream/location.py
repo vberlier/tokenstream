@@ -42,6 +42,8 @@ class SourceLocation(NamedTuple):
         >>> SourceLocation(0, 1, 1).with_horizontal_offset(41)
         SourceLocation(pos=41, lineno=1, colno=42)
         """
+        if self.unknown:
+            return self
         return SourceLocation(self.pos + offset, self.lineno, self.colno + offset)
 
 
