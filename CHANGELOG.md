@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.2 (2021-10-09)
+### Fix
+* Handle windows line endings ([`068144d`](https://github.com/vberlier/tokenstream/commit/068144d0cadad0265ae292ec5dd9a925265735ef))
+
 ## v1.2.1 (2021-09-24)
 ### Fix
 * With_horizontal_offset doesn't modify unkown location anymore ([`e17f897`](https://github.com/vberlier/tokenstream/commit/e17f897fec2feb53b0df3c7c62efdb0fe6c1fcd1))
