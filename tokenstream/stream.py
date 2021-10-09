@@ -91,7 +91,7 @@ class TokenStream:
         >>> stream = TokenStream("hello world")
         >>> with stream.syntax(word=r"[a-z]+"):
         ...     print(stream.regex.pattern)
-        (?P<word>[a-z]+)|(?P<newline>\n)|(?P<whitespace>[ \t]+)|(?P<invalid>.+)
+        (?P<word>[a-z]+)|(?P<newline>\r?\n)|(?P<whitespace>[ \t]+)|(?P<invalid>.+)
 
     location
         Tracks the position of the next token to extract in the input string.
@@ -178,7 +178,7 @@ class TokenStream:
                 f"(?P<{name}>{regex})"
                 for name, regex in self.syntax_rules
                 + (
-                    ("newline", r"\n"),
+                    ("newline", r"\r?\n"),
                     ("whitespace", r"[ \t]+"),
                     ("invalid", r".+"),
                 )
