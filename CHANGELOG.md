@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.3 (2021-10-20)
+### Fix
+* Set invalid syntax location for unexpected token ([`4231809`](https://github.com/vberlier/tokenstream/commit/423180921e036bdfb0ea3c1025841248aedbb010))
+
 ## v1.2.2 (2021-10-09)
 ### Fix
 * Handle windows line endings ([`068144d`](https://github.com/vberlier/tokenstream/commit/068144d0cadad0265ae292ec5dd9a925265735ef))
