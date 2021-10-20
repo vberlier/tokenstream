@@ -847,7 +847,7 @@ class TokenStream:
             return result
 
         if token := self.peek():
-            raise self.emit_error(UnexpectedToken(token, patterns))
+            raise set_location(self.emit_error(UnexpectedToken(token, patterns)), token)
         else:
             raise self.emit_error(UnexpectedEOF(patterns))
 
