@@ -34,14 +34,12 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install
-      - name: Install root package
-        run: rm -f setup.py && pip install .
       - name: Run tests
         run: poetry run pytest -v
       - name: Run type-checking
         run: npm run check
       - name: Verify library interface
-        run: npm run verifytypes
+        run: mkdir _tmp && cd _tmp && poetry run npx pyright --verifytypes tokenstream
       - name: Check formatting
         run: poetry run black --check tokenstream examples tests
       - name: Release
