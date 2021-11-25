@@ -1022,6 +1022,8 @@ class TokenStream:
                     elif exc.location > first.location:
                         exceptions = [exc]
 
+                    first, *other_exceptions = exceptions
+
                     if isinstance(first, UnexpectedToken):
                         patterns = list(first.expected_patterns)
 
