@@ -1000,41 +1000,34 @@ class TokenStream:
         '123'
         """
         should_break = False
-        exceptions: List[InvalidSyntax] = []
+        exception: Optional[InvalidSyntax] = None
 
         @contextmanager
         def alternative(active: bool):
             with self.alternative(active):
-                nonlocal should_break, exceptions
+                nonlocal should_break, exception
 
                 try:
                     yield
                     should_break = True
 
                 except InvalidSyntax as exc:
-                    if not exceptions:
-                        exceptions.append(exc)
+                    if not exception:
+                        exception = exc
 
-                    first, *other_exceptions = exceptions
+                    if exc.location > exception.location:
+                        exception = exc
+                    elif (
+                        isinstance(exc, UnexpectedToken)
+                        and isinstance(exception, UnexpectedToken)
+                        and exc.location == exception.location
+                    ):
+                        exception.expected_patterns = [
+                            *exception.expected_patterns,
+                            *exc.expected_patterns,
+                        ]
 
-                    if exc.location == first.location and exc is not first:
-                        exceptions.append(exc)
-                    elif exc.location > first.location:
-                        exceptions = [exc]
-
-                    first, *other_exceptions = exceptions
-
-                    if isinstance(first, UnexpectedToken):
-                        patterns = list(first.expected_patterns)
-
-                        for exc in other_exceptions:
-                            if isinstance(exc, UnexpectedToken):
-                                patterns.extend(exc.expected_patterns)
-
-                        exc = UnexpectedToken(first.token, patterns)
-                        raise set_location(exc, first) from None
-                    else:
-                        raise first from None
+                    raise exception from None
 
         for i, arg in enumerate(args):
             yield arg, alternative(i < len(args) - 1)
