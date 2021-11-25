@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.6 (2021-11-25)
+### Fix
+* Prevent duplicating expected patterns ([`10cec04`](https://github.com/vberlier/tokenstream/commit/10cec045e3658333cf9a381fd166bcb8cf1a3064))
+
 ## v1.2.5 (2021-11-25)
 ### Fix
 * Simplify expected_patterns merging ([`ad10e50`](https://github.com/vberlier/tokenstream/commit/ad10e50804770a11c530a8234aeadd6b9561fb0f))
