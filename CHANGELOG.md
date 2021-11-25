@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.4 (2021-11-25)
+### Fix
+* Properly prioritize errors that occur later in the stream ([`a665924`](https://github.com/vberlier/tokenstream/commit/a665924a68e43a6f0f7b1b8cc069761b32436323))
+
 ## v1.2.3 (2021-10-20)
 ### Fix
 * Set invalid syntax location for unexpected token ([`4231809`](https://github.com/vberlier/tokenstream/commit/423180921e036bdfb0ea3c1025841248aedbb010))
