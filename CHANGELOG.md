@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.5 (2021-11-25)
+### Fix
+* Simplify expected_patterns merging ([`ad10e50`](https://github.com/vberlier/tokenstream/commit/ad10e50804770a11c530a8234aeadd6b9561fb0f))
+
 ## v1.2.4 (2021-11-25)
 ### Fix
 * Properly prioritize errors that occur later in the stream ([`a665924`](https://github.com/vberlier/tokenstream/commit/a665924a68e43a6f0f7b1b8cc069761b32436323))

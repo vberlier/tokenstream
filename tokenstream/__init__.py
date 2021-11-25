@@ -12,7 +12,7 @@ __all__ = [
 ]
 
 
-__version__ = "1.2.4"
+__version__ = "1.2.5"
 
 from .error import *
 from .location import *
