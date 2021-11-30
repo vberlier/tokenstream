@@ -263,3 +263,18 @@ def test_choose_append():
                     )
 
     assert result == ["hello", "world", (1, 2, 3), "thing"]
+
+
+def test_get():
+    stream = TokenStream("hello world 1 2 3 thing")
+
+    result: List[int] = []
+
+    with stream.syntax(number=r"\d+", word=r"\w+"):
+        while token := stream.get("number", "word"):
+            if token.match("number"):
+                result.append(int(token.value))
+            elif stream.get(("word", "world")):
+                result.append(777)
+
+    assert result == [777, 1, 2, 3]

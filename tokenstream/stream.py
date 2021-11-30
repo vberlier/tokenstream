@@ -872,7 +872,7 @@ class TokenStream:
         True
         """
         for result in self.collect(*patterns):
-            return result
+            return result if isinstance(result, Token) else next(filter(None, result))  # type: ignore
         return None
 
     def expect_any(self, *patterns: TokenPattern) -> Token:
