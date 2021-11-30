@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.2.7 (2021-11-30)
+### Fix
+* Get() method was returning a list instead of a single token ([`accf784`](https://github.com/vberlier/tokenstream/commit/accf7843f1263dbba6aa0893a157be608ed1758a))
+
 ## v1.2.6 (2021-11-25)
 ### Fix
 * Prevent duplicating expected patterns ([`10cec04`](https://github.com/vberlier/tokenstream/commit/10cec045e3658333cf9a381fd166bcb8cf1a3064))
