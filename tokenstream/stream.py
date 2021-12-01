@@ -173,6 +173,10 @@ class TokenStream:
         Called automatically upon instanciation and when the syntax rules change.
         Should be considered internal.
         """
+        if regex := self.regex_cache.get(self.syntax_rules):
+            self.regex = regex
+            return
+
         self.regex = re.compile(
             "|".join(
                 f"(?P<{name}>{regex})"
@@ -185,6 +189,7 @@ class TokenStream:
             ),
             re.MULTILINE,
         )
+
         self.regex_cache[self.syntax_rules] = self.regex
 
     def crop(self) -> None:
@@ -257,11 +262,7 @@ class TokenStream:
             (key, value) for key, value in kwargs.items() if value
         )
 
-        if regex := self.regex_cache.get(self.syntax_rules):
-            self.regex = regex
-        else:
-            self.bake_regex()
-
+        self.bake_regex()
         self.crop()
 
         try:
@@ -1082,3 +1083,35 @@ class TokenStream:
             yield self
         finally:
             self.data.update(to_restore)
+
+    def copy(self) -> "TokenStream":
+        """Return a copy of the stream.
+
+        >>> stream = TokenStream("hello world")
+        >>> with stream.syntax(word=r"[a-z]+"):
+        ...     stream.expect("word").value
+        ...     stream_copy = stream.copy()
+        ...     stream.expect("word").value
+        'hello'
+        'world'
+        >>> with stream_copy.syntax(letter=r"[a-z]"):
+        ...     [token.value for token in stream_copy]
+        ['w', 'o', 'r', 'l', 'd']
+        """
+        copy = TokenStream(self.source)
+
+        copy.syntax_rules = self.syntax_rules
+        copy.regex = self.regex
+
+        copy.location = self.location
+
+        copy.index = self.index
+        copy.tokens = list(self.tokens)
+        copy.indentation = list(self.indentation)
+        copy.indentation_skip = set(self.indentation_skip)
+
+        copy.ignored_tokens = set(self.ignored_tokens)
+
+        copy.data = dict(self.data)
+
+        return copy
