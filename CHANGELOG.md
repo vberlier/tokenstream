@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.0 (2021-12-01)
+### Feature
+* Make it possible to copy the stream ([`5a4a41c`](https://github.com/vberlier/tokenstream/commit/5a4a41c8f4a137a9c98bdda856cf4a4ba2169d0b))
+
 ## v1.2.7 (2021-11-30)
 ### Fix
 * Get() method was returning a list instead of a single token ([`accf784`](https://github.com/vberlier/tokenstream/commit/accf7843f1263dbba6aa0893a157be608ed1758a))
