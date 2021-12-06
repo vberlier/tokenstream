@@ -17,10 +17,14 @@ TokenPattern = Union[str, Tuple[str, str]]
 
 def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
     """Return a message describing the given patterns."""
-    token_types = [
-        pattern if isinstance(pattern, str) else f"{pattern[0]} {pattern[1]!r}"
-        for pattern in patterns
-    ]
+    token_types = list(
+        sorted(
+            {
+                pattern if isinstance(pattern, str) else f"{pattern[0]} {pattern[1]!r}"
+                for pattern in patterns
+            }
+        )
+    )
     if not token_types:
         return "anything"
     if len(token_types) == 1:
