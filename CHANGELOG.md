@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.1 (2021-12-06)
+### Fix
+* Sort expected patterns in explanation ([`c1c26cb`](https://github.com/vberlier/tokenstream/commit/c1c26cb874229a5e0319c882f3b6e5567fd14870))
+
 ## v1.3.0 (2021-12-01)
 ### Feature
 * Make it possible to copy the stream ([`5a4a41c`](https://github.com/vberlier/tokenstream/commit/5a4a41c8f4a137a9c98bdda856cf4a4ba2169d0b))
