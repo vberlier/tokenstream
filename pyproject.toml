@@ -29,7 +29,7 @@ black = "^22.1"
 pytest = "^7.0.1"
 isort = "^5.10.1"
 python-semantic-release = "^7.25.0"
-mudkip = "^0.4.14"
+mudkip = "^0.4.15"
 
 [tool.black]
 target-version = ["py38"]
@@ -65,8 +65,6 @@ preset = "furo"
 [tool.mudkip.override]
 html_title = "tokenstream"
 suppress_warnings = ["myst.header"]
-extensions = ["sphinx.ext.intersphinx"]
-intersphinx_mapping = {python = ["https://docs.python.org/3", ""]}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
