@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.2 (2022-02-19)
+### Fix
+* Update docs ([`a788ff1`](https://github.com/vberlier/tokenstream/commit/a788ff194eb630555a01ba9837a160e40f97dbec))
+
 ## v1.3.1 (2021-12-06)
 ### Fix
 * Sort expected patterns in explanation ([`c1c26cb`](https://github.com/vberlier/tokenstream/commit/c1c26cb874229a5e0319c882f3b6e5567fd14870))
