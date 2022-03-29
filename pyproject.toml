@@ -25,7 +25,7 @@ include = ["tokenstream/py.typed"]
 python = "^3.8"
 
 [tool.poetry.dev-dependencies]
-black = "^22.1"
+black = "^22.3"
 pytest = "^7.0.1"
 isort = "^5.10.1"
 python-semantic-release = "^7.25.0"
