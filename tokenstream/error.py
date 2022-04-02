@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 
-from typing import Sequence
+from typing import Tuple
 
 from .location import SourceLocation
 from .token import Token, TokenPattern, explain_patterns
@@ -22,11 +22,13 @@ class InvalidSyntax(Exception):
 
     location: SourceLocation
     end_location: SourceLocation
+    alternatives: Tuple["InvalidSyntax", ...]
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
         self.location = SourceLocation(0, 1, 1)
         self.end_location = SourceLocation(0, 1, 1)
+        self.alternatives = ()
 
     def format(self, filename: str) -> str:
         """Return a string representing the error and its location in a given file.
@@ -49,9 +51,9 @@ class UnexpectedEOF(InvalidSyntax):
         The patterns that the parser was expecting instead of reaching end of the file.
     """
 
-    expected_patterns: Sequence[TokenPattern]
+    expected_patterns: Tuple[TokenPattern, ...]
 
-    def __init__(self, expected_patterns: Sequence[TokenPattern] = ()):
+    def __init__(self, expected_patterns: Tuple[TokenPattern, ...] = ()):
         super().__init__(expected_patterns)
         self.expected_patterns = expected_patterns
 
@@ -73,9 +75,9 @@ class UnexpectedToken(InvalidSyntax):
     """
 
     token: Token
-    expected_patterns: Sequence[TokenPattern]
+    expected_patterns: Tuple[TokenPattern, ...]
 
-    def __init__(self, token: Token, expected_patterns: Sequence[TokenPattern] = ()):
+    def __init__(self, token: Token, expected_patterns: Tuple[TokenPattern, ...] = ()):
         super().__init__(token, expected_patterns)
         self.token = token
         self.expected_patterns = expected_patterns

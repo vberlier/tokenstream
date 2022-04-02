@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 
-from typing import NamedTuple, Sequence, Tuple, TypeVar, Union
+from typing import NamedTuple, Tuple, TypeVar, Union
 
 from .location import SourceLocation, set_location
 
@@ -15,7 +15,7 @@ T = TypeVar("T")
 TokenPattern = Union[str, Tuple[str, str]]
 
 
-def explain_patterns(patterns: Sequence[TokenPattern]) -> str:
+def explain_patterns(patterns: Tuple[TokenPattern, ...]) -> str:
     """Return a message describing the given patterns."""
     token_types = list(
         sorted(

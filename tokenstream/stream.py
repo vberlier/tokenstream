@@ -675,7 +675,7 @@ class TokenStream:
         ...
 
     @overload
-    def collect(self, pattern: TokenPattern) -> Iterator[Token]:
+    def collect(self, pattern: TokenPattern, /) -> Iterator[Token]:
         ...
 
     @overload
@@ -683,6 +683,7 @@ class TokenStream:
         self,
         pattern1: TokenPattern,
         pattern2: TokenPattern,
+        /,
         *patterns: TokenPattern,
     ) -> Iterator[List[Optional[Token]]]:
         ...
@@ -787,7 +788,7 @@ class TokenStream:
         ...
 
     @overload
-    def expect(self, pattern: TokenPattern) -> Token:
+    def expect(self, pattern: TokenPattern, /) -> Token:
         ...
 
     @overload
@@ -795,6 +796,7 @@ class TokenStream:
         self,
         pattern1: TokenPattern,
         pattern2: TokenPattern,
+        /,
         *patterns: TokenPattern,
     ) -> List[Optional[Token]]:
         ...
@@ -1013,17 +1015,19 @@ class TokenStream:
                     should_break = True
 
                 except InvalidSyntax as exc:
-                    if not exception or exc.location > exception.location:
+                    if not exception:
+                        exception = exc
+                    elif exc.location > exception.location:
+                        exc.alternatives += (exception,)
                         exception = exc
                     elif (
                         isinstance(exc, UnexpectedToken)
                         and isinstance(exception, UnexpectedToken)
                         and exc.location == exception.location
                     ):
-                        exception.expected_patterns = [
-                            *exception.expected_patterns,
-                            *exc.expected_patterns,
-                        ]
+                        exception.expected_patterns += exc.expected_patterns
+                    else:
+                        exception.alternatives += (exc,)
 
                     raise exception from None
 
