@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 
-from typing import Tuple
+from typing import Dict, List, Tuple, Type
 
 from .location import SourceLocation
 from .token import Token, TokenPattern, explain_patterns
@@ -18,17 +18,21 @@ class InvalidSyntax(Exception):
     ----------
     location
         The location of the error.
+    end_location
+        The end location of the error.
+    alternatives
+        A dictionary holding other alternative errors associated with the exception.
     """
 
     location: SourceLocation
     end_location: SourceLocation
-    alternatives: Tuple["InvalidSyntax", ...]
+    alternatives: Dict[Type["InvalidSyntax"], List["InvalidSyntax"]]
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
         self.location = SourceLocation(0, 1, 1)
         self.end_location = SourceLocation(0, 1, 1)
-        self.alternatives = ()
+        self.alternatives = {}
 
     def format(self, filename: str) -> str:
         """Return a string representing the error and its location in a given file.
@@ -40,6 +44,11 @@ class InvalidSyntax(Exception):
         path/to/my_file.txt:1:1: Expected anything but got invalid 'hello'.
         """
         return self.location.format(filename, str(self))
+
+    def add_alternative(self, exc: "InvalidSyntax") -> None:
+        """Associate an alternative error."""
+        self.alternatives.setdefault(type(exc), []).append(exc)
+        exc.alternatives.setdefault(type(self), []).append(self)
 
 
 class UnexpectedEOF(InvalidSyntax):
@@ -61,6 +70,14 @@ class UnexpectedEOF(InvalidSyntax):
         if not self.expected_patterns:
             return "Reached end of file unexpectedly."
         return f"Expected {explain_patterns(self.expected_patterns)} but reached end of file."
+
+    def add_alternative(self, exc: "InvalidSyntax") -> None:
+        if isinstance(exc, UnexpectedEOF) and self.location == exc.location:
+            patterns = self.expected_patterns + exc.expected_patterns
+            self.expected_patterns = patterns
+            exc.expected_patterns = patterns
+        else:
+            super().add_alternative(exc)
 
 
 class UnexpectedToken(InvalidSyntax):
@@ -91,3 +108,11 @@ class UnexpectedToken(InvalidSyntax):
         if value:
             value = f" {value!r}"
         return f"Expected {explain_patterns(self.expected_patterns)} but got {self.token.type}{value}."
+
+    def add_alternative(self, exc: "InvalidSyntax") -> None:
+        if isinstance(exc, UnexpectedToken) and self.location == exc.location:
+            patterns = self.expected_patterns + exc.expected_patterns
+            self.expected_patterns = patterns
+            exc.expected_patterns = patterns
+        else:
+            super().add_alternative(exc)

@@ -1015,20 +1015,12 @@ class TokenStream:
                     should_break = True
 
                 except InvalidSyntax as exc:
-                    if not exception:
-                        exception = exc
-                    elif exc.location > exception.location:
-                        exc.alternatives += (exception,)
-                        exception = exc
-                    elif (
-                        isinstance(exc, UnexpectedToken)
-                        and isinstance(exception, UnexpectedToken)
-                        and exc.location == exception.location
-                    ):
-                        exception.expected_patterns += exc.expected_patterns
+                    if exception:
+                        exception.add_alternative(exc)
+                        if exc.location > exception.location:
+                            exception = exc
                     else:
-                        exception.alternatives += (exc,)
-
+                        exception = exc
                     raise exception from None
 
         for i, arg in enumerate(args):
