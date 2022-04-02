@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.3 (2022-04-02)
+### Fix
+* Keep track of alternative errors ([`9bee458`](https://github.com/vberlier/tokenstream/commit/9bee458408166badad4795e8174935ea615ea055))
+
 ## v1.3.2 (2022-02-19)
 ### Fix
 * Update docs ([`a788ff1`](https://github.com/vberlier/tokenstream/commit/a788ff194eb630555a01ba9837a160e40f97dbec))
