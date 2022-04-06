@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.3.4 (2022-04-06)
+### Fix
+* Better mechanism for tracking alternative errors ([`4e0c3f2`](https://github.com/vberlier/tokenstream/commit/4e0c3f2e5a72e095c57a84ba5c59414151b06b19))
+
 ## v1.3.3 (2022-04-02)
 ### Fix
 * Keep track of alternative errors ([`9bee458`](https://github.com/vberlier/tokenstream/commit/9bee458408166badad4795e8174935ea615ea055))
