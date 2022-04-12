@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.0 (2022-04-12)
+### Feature
+* Add notes ([`8be67ce`](https://github.com/vberlier/tokenstream/commit/8be67ce6c4c942689fe93ee73d83a2eed19030ae))
+
 ## v1.3.4 (2022-04-06)
 ### Fix
 * Better mechanism for tracking alternative errors ([`4e0c3f2`](https://github.com/vberlier/tokenstream/commit/4e0c3f2e5a72e095c57a84ba5c59414151b06b19))
