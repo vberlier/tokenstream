@@ -22,17 +22,21 @@ class InvalidSyntax(Exception):
         The end location of the error.
     alternatives
         A dictionary holding other alternative errors associated with the exception.
+    notes
+        A list of notes associated with the exception.
     """
 
     location: SourceLocation
     end_location: SourceLocation
     alternatives: Dict[Type["InvalidSyntax"], List["InvalidSyntax"]]
+    notes: List[str]
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
         self.location = SourceLocation(0, 1, 1)
         self.end_location = SourceLocation(0, 1, 1)
         self.alternatives = {}
+        self.notes = []
 
     def format(self, filename: str) -> str:
         """Return a string representing the error and its location in a given file.
