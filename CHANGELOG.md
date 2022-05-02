@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.1 (2022-05-02)
+### Fix
+* Take into account repeating newlines before emitting dedent tokens ([`109552c`](https://github.com/vberlier/tokenstream/commit/109552c2b363359577f9afa1071d347e8ab55499))
+
 ## v1.4.0 (2022-04-12)
 ### Feature
 * Add notes ([`8be67ce`](https://github.com/vberlier/tokenstream/commit/8be67ce6c4c942689fe93ee73d83a2eed19030ae))
