@@ -543,7 +543,10 @@ class TokenStream:
                         self.indentation.append(level)
                         yield self.current
 
-                elif self.current.type == "newline" and match.lastgroup != "whitespace":
+                elif self.current.type == "newline" and match.lastgroup not in [
+                    "whitespace",
+                    "newline",
+                ]:
                     yield from emit_dedent()
 
             self.emit_token(match.lastgroup, match.group())

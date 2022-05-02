@@ -152,6 +152,36 @@ def test_indent_whitespace():
         stream.expect("word")
 
 
+def test_indent_tricky():
+    stream = TokenStream(
+        "hello\n"
+        "\n"
+        "    world\n"
+        "\n"
+        "    foo\n"
+        "        bar\n"
+        "\n"
+        "        \n"
+        "\n"
+        "    aaa\n"
+        "        bbb\n"
+    )
+
+    with stream.syntax(word=r"[a-z]+"), stream.indent():
+        stream.expect("word")
+        stream.expect("indent")
+        stream.expect("word")
+        stream.expect("word")
+        stream.expect("indent")
+        stream.expect("word")
+        stream.expect("dedent")
+        stream.expect("word")
+        stream.expect("indent")
+        stream.expect("word")
+        stream.expect("dedent")
+        stream.expect("dedent")
+
+
 def test_checkpoint():
     stream = TokenStream("hello world")
 
