@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.4.2 (2022-06-02)
+### Fix
+* Update mudkip ([`a58854c`](https://github.com/vberlier/tokenstream/commit/a58854cb7c3a699653d02dc4de82d21d45f637f9))
+
 ## v1.4.1 (2022-05-02)
 ### Fix
 * Take into account repeating newlines before emitting dedent tokens ([`109552c`](https://github.com/vberlier/tokenstream/commit/109552c2b363359577f9afa1071d347e8ab55499))
