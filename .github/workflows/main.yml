@@ -39,7 +39,7 @@ jobs:
       - name: Run type-checking
         run: npm run check
       - name: Verify library interface
-        run: mkdir _tmp && cd _tmp && poetry run npx pyright --verifytypes tokenstream
+        run: poetry run npx pyright --verifytypes tokenstream
       - name: Check formatting
         run: poetry run black --check tokenstream examples tests
       - name: Release
