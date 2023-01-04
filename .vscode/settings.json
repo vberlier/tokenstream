@@ -1,5 +1,4 @@
 {
-  "python.pythonPath": "${workspaceFolder}/.venv",
   "python.formatting.provider": "black",
   "python.languageServer": "Pylance",
   "python.linting.enabled": false,
