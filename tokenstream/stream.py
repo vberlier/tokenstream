@@ -917,7 +917,11 @@ class TokenStream:
         UnexpectedToken: Expected eof but got invalid 'foo'.
         """
         with self.intercept("eof"):
-            self.expect("eof")
+            for _ in self.collect("eof"):
+                return
+
+        if token := self.peek():
+            raise set_location(self.emit_error(UnexpectedToken(token, ("eof",))), token)
 
     @contextmanager
     def checkpoint(self) -> Iterator[CheckpointCommit]:

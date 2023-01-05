@@ -32,7 +32,7 @@ def test_expect_fail():
     with stream.syntax(number=r"\d+", word=r"\w+"):
         assert stream.expect("word").value == "hello"
 
-        with pytest.raises(  # type: ignore
+        with pytest.raises(
             UnexpectedToken, match="Expected number but got word 'world'"
         ):
             stream.expect("number").value
@@ -70,7 +70,7 @@ def test_reject_whitespace():
         assert stream.ignored_tokens == {"eof"}
 
         stream.expect("word").value
-        with pytest.raises(  # type: ignore
+        with pytest.raises(
             UnexpectedToken, match="Expected word but got whitespace ' '"
         ):
             stream.expect("word").value
@@ -306,3 +306,18 @@ def test_get():
                 result.append(777)
 
     assert result == [777, 1, 2, 3]
+
+
+def test_eof():
+    stream = TokenStream("hello world")
+
+    with stream.syntax(word=r"\w+"), stream.intercept("eof"):
+        stream.expect("word")
+
+        with pytest.raises(UnexpectedToken, match="Expected eof but got word 'world'."):
+            stream.expect_eof()
+
+        stream.expect("word")
+        stream.expect_eof()
+
+    stream.expect_eof()
