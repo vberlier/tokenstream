@@ -5,8 +5,6 @@ __all__ = [
 ]
 
 
-from typing import Dict, List, Tuple, Type
-
 from .location import SourceLocation
 from .token import Token, TokenPattern, explain_patterns
 
@@ -28,8 +26,8 @@ class InvalidSyntax(Exception):
 
     location: SourceLocation
     end_location: SourceLocation
-    alternatives: Dict[Type["InvalidSyntax"], List["InvalidSyntax"]]
-    notes: List[str]
+    alternatives: "dict[type[InvalidSyntax], list[InvalidSyntax]]"
+    notes: list[str]
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
@@ -64,9 +62,9 @@ class UnexpectedEOF(InvalidSyntax):
         The patterns that the parser was expecting instead of reaching end of the file.
     """
 
-    expected_patterns: Tuple[TokenPattern, ...]
+    expected_patterns: tuple[TokenPattern, ...]
 
-    def __init__(self, expected_patterns: Tuple[TokenPattern, ...] = ()):
+    def __init__(self, expected_patterns: tuple[TokenPattern, ...] = ()):
         super().__init__(expected_patterns)
         self.expected_patterns = expected_patterns
 
@@ -96,9 +94,9 @@ class UnexpectedToken(InvalidSyntax):
     """
 
     token: Token
-    expected_patterns: Tuple[TokenPattern, ...]
+    expected_patterns: tuple[TokenPattern, ...]
 
-    def __init__(self, token: Token, expected_patterns: Tuple[TokenPattern, ...] = ()):
+    def __init__(self, token: Token, expected_patterns: tuple[TokenPattern, ...] = ()):
         super().__init__(token, expected_patterns)
         self.token = token
         self.expected_patterns = expected_patterns

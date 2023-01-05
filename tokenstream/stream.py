@@ -8,19 +8,7 @@ __all__ = [
 import re
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import (
-    Any,
-    ContextManager,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    TypeVar,
-    overload,
-)
+from typing import Any, ContextManager, Iterable, Iterator, TypeVar, overload
 
 from .error import InvalidSyntax, UnexpectedEOF, UnexpectedToken
 from .location import SourceLocation, set_location
@@ -29,7 +17,7 @@ from .token import Token, TokenPattern
 T = TypeVar("T")
 
 
-SyntaxRules = Tuple[Tuple[str, str], ...]
+SyntaxRules = tuple[tuple[str, str], ...]
 
 
 def extra_field(**kwargs: Any) -> Any:
@@ -57,7 +45,7 @@ class CheckpointCommit:
         self.rollback = False
 
 
-BAKED_REGEX_CACHE: Dict[Any, Dict[SyntaxRules, "re.Pattern[str]"]] = {}
+BAKED_REGEX_CACHE: dict[Any, dict[SyntaxRules, re.Pattern[str]]] = {}
 
 
 @dataclass
@@ -153,22 +141,22 @@ class TokenStream:
 
     source: str
     syntax_rules: SyntaxRules = extra_field(default=())
-    regex: "re.Pattern[str]" = extra_field()
+    regex: re.Pattern[str] = extra_field()
 
     location: SourceLocation = extra_field()
 
     index: int = extra_field(default=-1)
-    tokens: List[Token] = extra_field(default_factory=list)
-    indentation: List[int] = extra_field(default_factory=list)
-    indentation_skip: Set[str] = extra_field(default_factory=set)
+    tokens: list[Token] = extra_field(default_factory=list)
+    indentation: list[int] = extra_field(default_factory=list)
+    indentation_skip: set[str] = extra_field(default_factory=set)
 
     generator: Iterator[Token] = extra_field()
-    ignored_tokens: Set[str] = extra_field()
+    ignored_tokens: set[str] = extra_field()
 
-    data: Dict[str, Any] = extra_field(default_factory=dict)
+    data: dict[str, Any] = extra_field(default_factory=dict)
 
     regex_module: Any = field(default_factory=lambda: re, repr=False)
-    regex_cache: Dict[SyntaxRules, "re.Pattern[str]"] = extra_field()
+    regex_cache: dict[SyntaxRules, re.Pattern[str]] = extra_field()
 
     def __post_init__(self) -> None:
         self.location = SourceLocation(pos=0, lineno=1, colno=1)
@@ -227,7 +215,7 @@ class TokenStream:
         )
 
     @contextmanager
-    def syntax(self, **kwargs: Optional[str]) -> Iterator[None]:
+    def syntax(self, **kwargs: str | None) -> Iterator[None]:
         """Extend token syntax using regular expressions.
 
         The keyword arguments associate regular expression patterns to token types. The method returns a context manager during which the specified tokens will be recognized.
@@ -311,7 +299,7 @@ class TokenStream:
     def indent(
         self,
         enable: bool = True,
-        skip: Optional[Iterable[str]] = None,
+        skip: Iterable[str] | None = None,
     ) -> Iterator[None]:
         r"""Enable or disable indentation.
 
@@ -581,7 +569,7 @@ class TokenStream:
 
         return self.current
 
-    def peek(self, n: int = 1) -> Optional[Token]:
+    def peek(self, n: int = 1) -> Token | None:
         """Peek around the current token.
 
         The method returns the next token in the stream without advancing
@@ -698,7 +686,7 @@ class TokenStream:
         pattern2: TokenPattern,
         /,
         *patterns: TokenPattern,
-    ) -> Iterator[List[Optional[Token]]]:
+    ) -> Iterator[list[Token | None]]:
         ...
 
     def collect(self, *patterns: TokenPattern) -> Iterator[Any]:
@@ -811,7 +799,7 @@ class TokenStream:
         pattern2: TokenPattern,
         /,
         *patterns: TokenPattern,
-    ) -> List[Optional[Token]]:
+    ) -> list[Token | None]:
         ...
 
     def expect(self, *patterns: TokenPattern) -> Any:
@@ -867,7 +855,7 @@ class TokenStream:
         else:
             raise self.emit_error(UnexpectedEOF(patterns))
 
-    def get(self, *patterns: TokenPattern) -> Optional[Token]:
+    def get(self, *patterns: TokenPattern) -> Token | None:
         """Return the next token if it matches any of the given patterns.
 
         The method works a bit like :meth:`expect` but will return ``None``
@@ -1002,7 +990,7 @@ class TokenStream:
             yield
             commit()
 
-    def choose(self, *args: T) -> Iterator[Tuple[T, ContextManager[None]]]:
+    def choose(self, *args: T) -> Iterator[tuple[T, ContextManager[None]]]:
         """Iterate over each argument until one of the alternative succeeds.
 
         >>> stream = TokenStream("hello world 123")
@@ -1016,7 +1004,7 @@ class TokenStream:
         '123'
         """
         should_break = False
-        exception: Optional[InvalidSyntax] = None
+        exception: InvalidSyntax | None = None
 
         @contextmanager
         def alternative(active: bool):
@@ -1050,8 +1038,8 @@ class TokenStream:
         ...     stream.data["foo"]
         123
         """
-        to_restore: Dict[str, Any] = {}
-        to_remove: Set[str] = set()
+        to_restore: dict[str, Any] = {}
+        to_remove: set[str] = set()
 
         for key, value in data.items():
             if key in self.data:
@@ -1081,7 +1069,7 @@ class TokenStream:
         {}
         {'foo': 123}
         """
-        to_restore: Dict[str, Any] = {}
+        to_restore: dict[str, Any] = {}
 
         for key in args:
             if key in self.data:

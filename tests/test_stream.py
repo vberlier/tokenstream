@@ -1,5 +1,3 @@
-from typing import List, Tuple, Union
-
 import pytest
 
 from tokenstream import TokenStream, UnexpectedToken
@@ -206,7 +204,7 @@ def test_checkpoint_commit():
 def test_checkpoint_error():
     stream = TokenStream("hello world 1 2 3 thing")
 
-    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:
+    def argument(stream: TokenStream) -> str | tuple[int, int, int]:
         with stream.checkpoint() as commit:
             triplet = (
                 int(stream.expect("number").value),
@@ -229,7 +227,7 @@ def test_checkpoint_error():
 def test_alternative():
     stream = TokenStream("hello world 1 2 3 thing")
 
-    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:
+    def argument(stream: TokenStream) -> str | tuple[int, int, int]:
         with stream.alternative():
             return (
                 int(stream.expect("number").value),
@@ -253,14 +251,14 @@ def test_choose():
     def word(stream: TokenStream) -> str:
         return stream.expect("word").value
 
-    def triplet(stream: TokenStream) -> Tuple[int, int, int]:
+    def triplet(stream: TokenStream) -> tuple[int, int, int]:
         return (
             int(stream.expect("number").value),
             int(stream.expect("number").value),
             int(stream.expect("number").value),
         )
 
-    def argument(stream: TokenStream) -> Union[str, Tuple[int, int, int]]:  # type: ignore
+    def argument(stream: TokenStream) -> str | tuple[int, int, int]:  # type: ignore
         for parser, alternative in stream.choose(word, triplet):
             with alternative:
                 return parser(stream)
@@ -276,7 +274,7 @@ def test_choose():
 
 def test_choose_append():
     stream = TokenStream("hello world 1 2 3 thing")
-    result: List[Union[str, Tuple[int, int, int]]] = []
+    result: list[str | tuple[int, int, int]] = []
 
     with stream.syntax(number=r"\d+", word=r"\w+"):
         while stream.peek():
@@ -298,7 +296,7 @@ def test_choose_append():
 def test_get():
     stream = TokenStream("hello world 1 2 3 thing")
 
-    result: List[int] = []
+    result: list[int] = []
 
     with stream.syntax(number=r"\d+", word=r"\w+"):
         while token := stream.get("number", "word"):
