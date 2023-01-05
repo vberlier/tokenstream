@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v1.5.0 (2023-01-05)
+### Feature
+* Make it possible to swap the underlying regex module ([`b47995e`](https://github.com/vberlier/tokenstream/commit/b47995ee40c0e1c43afa68bc891770670e0e1502))
+
+### Fix
+* Allow expect_eof() to succeed even if the "eof" token was already consumed ([`7a8e799`](https://github.com/vberlier/tokenstream/commit/7a8e7995e3e9d74a7146e15c30440795ce026fcc))
+* Update typing ([`0ce06c7`](https://github.com/vberlier/tokenstream/commit/0ce06c7923a694496382060646d91317f6b8bed9))
+
 ## v1.4.2 (2022-06-02)
 ### Fix
 * Update mudkip ([`a58854c`](https://github.com/vberlier/tokenstream/commit/a58854cb7c3a699653d02dc4de82d21d45f637f9))
