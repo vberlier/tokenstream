@@ -2,6 +2,7 @@ __all__ = [
     "TokenStream",
     "SyntaxRules",
     "CheckpointCommit",
+    "BAKED_REGEX_CACHE",
 ]
 
 import re
@@ -9,7 +10,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import (
     Any,
-    ClassVar,
     ContextManager,
     Dict,
     Iterable,
@@ -55,6 +55,9 @@ class CheckpointCommit:
 
     def __call__(self) -> None:
         self.rollback = False
+
+
+BAKED_REGEX_CACHE: Dict[Any, Dict[SyntaxRules, "re.Pattern[str]"]] = {}
 
 
 @dataclass
@@ -138,6 +141,11 @@ class TokenStream:
     data
         A dictionary holding arbitrary user data.
 
+    regex_module
+        The module to use for compiling regex patterns. Uses the built-in :mod:`re`
+        module by default. It's possible to swap it out for https://github.com/mrabarnett/mrab-regex
+        by specifying the module as keyword argument when creating a new :class:`TokenStream`.
+
     regex_cache
         A cache that keeps a reference to the compiled regular expression associated
         to each set of syntax rules.
@@ -159,25 +167,27 @@ class TokenStream:
 
     data: Dict[str, Any] = extra_field(default_factory=dict)
 
-    regex_cache: ClassVar[Dict[SyntaxRules, "re.Pattern[str]"]] = {}
+    regex_module: Any = field(default_factory=lambda: re, repr=False)
+    regex_cache: Dict[SyntaxRules, "re.Pattern[str]"] = extra_field()
 
     def __post_init__(self) -> None:
-        self.bake_regex()
         self.location = SourceLocation(pos=0, lineno=1, colno=1)
         self.generator = self.generate_tokens()
         self.ignored_tokens = {"whitespace", "newline", "eof"}
+        self.regex_cache = BAKED_REGEX_CACHE.setdefault(self.regex_module, {})
+        self.bake_regex()
 
     def bake_regex(self) -> None:
         """Compile the syntax rules.
 
-        Called automatically upon instanciation and when the syntax rules change.
+        Called automatically upon instantiation and when the syntax rules change.
         Should be considered internal.
         """
         if regex := self.regex_cache.get(self.syntax_rules):
             self.regex = regex
             return
 
-        self.regex = re.compile(
+        self.regex = self.regex_module.compile(
             "|".join(
                 f"(?P<{name}>{regex})"
                 for name, regex in self.syntax_rules
@@ -187,7 +197,7 @@ class TokenStream:
                     ("invalid", r".+"),
                 )
             ),
-            re.MULTILINE,
+            self.regex_module.MULTILINE,
         )
 
         self.regex_cache[self.syntax_rules] = self.regex
@@ -447,7 +457,7 @@ class TokenStream:
     def head(self, characters: int = 50) -> str:
         """Preview the characters ahead of the current token.
 
-        This is useful for error messages and visuallizing the
+        This is useful for error messages and visualizing the
         input following the current token.
 
         >>> stream = TokenStream("hello world")
@@ -1097,7 +1107,7 @@ class TokenStream:
         ...     [token.value for token in stream_copy]
         ['w', 'o', 'r', 'l', 'd']
         """
-        copy = TokenStream(self.source)
+        copy = TokenStream(self.source, regex_module=self.regex_module)
 
         copy.syntax_rules = self.syntax_rules
         copy.regex = self.regex
