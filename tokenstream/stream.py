@@ -8,7 +8,7 @@ __all__ = [
 import re
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, ContextManager, Iterable, Iterator, TypeVar, overload
+from typing import Any, Callable, ContextManager, Iterable, Iterator, TypeVar, overload
 
 from .error import InvalidSyntax, UnexpectedEOF, UnexpectedToken
 from .location import SourceLocation, set_location
@@ -67,6 +67,9 @@ class TokenStream:
         >>> stream = TokenStream("hello world")
         >>> stream.source
         'hello world'
+
+    token_handler
+        A callback for modifying tokens before they're emitted.
 
     syntax_rules
         A tuple of ``(token_type, pattern)`` pairs that define the recognizable tokens.
@@ -140,6 +143,7 @@ class TokenStream:
     """
 
     source: str
+    token_handler: Callable[[Token], Token] | None = extra_field(default=None)
     syntax_rules: SyntaxRules = extra_field(default=())
     regex: re.Pattern[str] = extra_field()
 
@@ -481,6 +485,9 @@ class TokenStream:
             location=self.location,
             end_location=SourceLocation(end_pos, end_lineno, end_colno),
         )
+
+        if self.token_handler:
+            token = self.token_handler(token)
 
         self.location = token.end_location
         self.tokens.append(token)
