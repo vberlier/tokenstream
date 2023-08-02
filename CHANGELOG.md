@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.6.0 (2023-08-02)
+### Feature
+* Add token_handler ([`a6b1425`](https://github.com/vberlier/tokenstream/commit/a6b14252af5fdf3c4eb66aa980aa2446822cb702))
+
 ## v1.5.0 (2023-01-05)
 ### Feature
 * Make it possible to swap the underlying regex module ([`b47995e`](https://github.com/vberlier/tokenstream/commit/b47995ee40c0e1c43afa68bc891770670e0e1502))
