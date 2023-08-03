@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 
-from .location import SourceLocation
+from .location import INITIAL_LOCATION, SourceLocation
 from .token import Token, TokenPattern, explain_patterns
 
 
@@ -31,8 +31,8 @@ class InvalidSyntax(Exception):
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
-        self.location = SourceLocation(0, 1, 1)
-        self.end_location = SourceLocation(0, 1, 1)
+        self.location = INITIAL_LOCATION
+        self.end_location = INITIAL_LOCATION
         self.alternatives = {}
         self.notes = []
 

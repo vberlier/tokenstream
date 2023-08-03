@@ -1,12 +1,14 @@
 __all__ = [
     "SourceLocation",
     "set_location",
+    "INITIAL_LOCATION",
     "UNKNOWN_LOCATION",
 ]
 
 
+from bisect import bisect
 from dataclasses import FrozenInstanceError, replace
-from typing import Any, NamedTuple, TypeVar
+from typing import Any, NamedTuple, Sequence, TypeVar
 
 T = TypeVar("T")
 
@@ -39,14 +41,76 @@ class SourceLocation(NamedTuple):
     def with_horizontal_offset(self, offset: int) -> "SourceLocation":
         """Create a modified source location along the horizontal axis.
 
-        >>> SourceLocation(0, 1, 1).with_horizontal_offset(41)
+        >>> INITIAL_LOCATION.with_horizontal_offset(41)
         SourceLocation(pos=41, lineno=1, colno=42)
         """
         if self.unknown:
             return self
         return SourceLocation(self.pos + offset, self.lineno, self.colno + offset)
 
+    def skip_over(self, value: str) -> "SourceLocation":
+        """Return the source location after skipping over a piece of text.
 
+        >>> INITIAL_LOCATION.skip_over("hello\\nworld")
+        SourceLocation(pos=11, lineno=2, colno=6)
+        """
+        return SourceLocation(
+            self.pos + len(value),
+            self.lineno + value.count("\n"),
+            self.colno + len(value)
+            if (line_start := value.rfind("\n")) == -1
+            else len(value) - line_start,
+        )
+
+    def map(
+        self,
+        input_mappings: Sequence["SourceLocation"],
+        output_mappings: Sequence["SourceLocation"],
+    ) -> "SourceLocation":
+        """Map a source location.
+
+        The mappings must contain corresponding source locations in order.
+
+        >>> INITIAL_LOCATION.map([], [])
+        SourceLocation(pos=0, lineno=1, colno=1)
+        >>> mappings1 = [SourceLocation(16, 2, 27), SourceLocation(19, 2, 30)]
+        >>> mappings2 = [SourceLocation(24, 3, 8), SourceLocation(67, 4, 12)]
+        >>> INITIAL_LOCATION.map(mappings1, mappings2)
+        SourceLocation(pos=0, lineno=1, colno=1)
+        >>> SourceLocation(15, 2, 26).map(mappings1, mappings2)
+        SourceLocation(pos=15, lineno=2, colno=26)
+        >>> SourceLocation(16, 2, 27).map(mappings1, mappings2)
+        SourceLocation(pos=24, lineno=3, colno=8)
+        >>> SourceLocation(18, 2, 29).map(mappings1, mappings2)
+        SourceLocation(pos=26, lineno=3, colno=10)
+        >>> SourceLocation(19, 2, 30).map(mappings1, mappings2)
+        SourceLocation(pos=67, lineno=4, colno=12)
+        >>> SourceLocation(31, 3, 6).map(mappings1, mappings2)
+        SourceLocation(pos=79, lineno=5, colno=6)
+        """
+        index = bisect(input_mappings, self) - 1
+        if index < 0:
+            return self
+        return self.relocate(input_mappings[index], output_mappings[index])
+
+    def relocate(
+        self,
+        base_location: "SourceLocation",
+        target_location: "SourceLocation",
+    ) -> "SourceLocation":
+        """Return the current location transformed relative to the target location."""
+        pos, lineno, colno = self
+
+        pos = target_location.pos + (pos - base_location.pos)
+        lineno = target_location.lineno + (lineno - base_location.lineno)
+
+        if lineno == target_location.lineno:
+            colno = target_location.colno + (colno - base_location.colno)
+
+        return SourceLocation(pos, lineno, colno)
+
+
+INITIAL_LOCATION = SourceLocation(pos=0, lineno=1, colno=1)
 UNKNOWN_LOCATION = SourceLocation(pos=-1, lineno=0, colno=0)
 
 

@@ -1,6 +1,15 @@
+import re
+from itertools import islice
+
 import pytest
 
-from tokenstream import TokenStream, UnexpectedToken
+from tokenstream import (
+    INITIAL_LOCATION,
+    SourceLocation,
+    Token,
+    TokenStream,
+    UnexpectedToken,
+)
 
 
 def test_basic():
@@ -321,3 +330,78 @@ def test_eof():
         stream.expect_eof()
 
     stream.expect_eof()
+
+
+WRAP_REGEX = re.compile(r"(\\[ \t]*\r?\n[ \t]*)")
+
+
+def wrap_lines(source: str) -> tuple[str, list[SourceLocation], list[SourceLocation]]:
+    it = iter(WRAP_REGEX.split(source))
+    text = next(it)
+
+    result = [text]
+    source_mappings: list[SourceLocation] = []
+    preprocessed_mappings: list[SourceLocation] = []
+
+    source_location = INITIAL_LOCATION.skip_over(text)
+    preprocessed_location = source_location
+
+    while True:
+        try:
+            backslash, text = islice(it, 2)
+        except ValueError:
+            break
+
+        source_location = source_location.skip_over(backslash)
+        source_mappings.append(source_location)
+        preprocessed_mappings.append(preprocessed_location)
+
+        result.append(text)
+        source_location = source_location.skip_over(text)
+        preprocessed_location = preprocessed_location.skip_over(text)
+
+    return "".join(result), source_mappings, preprocessed_mappings
+
+
+def test_wrap_line():
+    source = r"""
+        hello\
+        world
+        f\
+        o\
+        o
+
+        bar
+    """
+
+    expected_preprocessing = """
+        helloworld
+        foo
+
+        bar
+    """
+
+    stream = TokenStream(source, preprocessor=wrap_lines)
+    assert stream.preprocessed_source == expected_preprocessing
+
+    with stream.syntax(word=r"\w+"):
+        assert list(stream) == [
+            Token(
+                type="word",
+                value="helloworld",
+                location=SourceLocation(pos=9, lineno=2, colno=9),
+                end_location=SourceLocation(pos=29, lineno=3, colno=14),
+            ),
+            Token(
+                type="word",
+                value="foo",
+                location=SourceLocation(pos=38, lineno=4, colno=9),
+                end_location=SourceLocation(pos=61, lineno=6, colno=10),
+            ),
+            Token(
+                type="word",
+                value="bar",
+                location=SourceLocation(pos=71, lineno=8, colno=9),
+                end_location=SourceLocation(pos=74, lineno=8, colno=12),
+            ),
+        ]
