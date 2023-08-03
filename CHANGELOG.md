@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v1.7.0 (2023-08-03)
+### Feature
+* Add preprocessor ([`2a5573c`](https://github.com/vberlier/tokenstream/commit/2a5573c33f9bf90986f12f30c7e903743ee40791))
+
 ## v1.6.0 (2023-08-02)
 ### Feature
 * Add token_handler ([`a6b1425`](https://github.com/vberlier/tokenstream/commit/a6b14252af5fdf3c4eb66aa980aa2446822cb702))
