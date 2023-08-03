@@ -1,0 +1,687 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="API reference" href="../api_reference/" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Changelog - tokenstream</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mudkip_furo.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../"><div class="brand">tokenstream</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../">
+  
+  
+  <span class="sidebar-brand-text">tokenstream</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/">API reference</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vberlier/tokenstream">GitHub repository</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/tokenstream">PyPI package</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">#</a></h1>
+<!--next-version-placeholder-->
+<section id="v1-7-0-2023-08-03">
+<h2>v1.7.0 (2023-08-03)<a class="headerlink" href="#v1-7-0-2023-08-03" title="Permalink to this heading">#</a></h2>
+<section id="feature">
+<h3>Feature<a class="headerlink" href="#feature" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add preprocessor (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/2a5573c33f9bf90986f12f30c7e903743ee40791"><code class="docutils literal notranslate"><span class="pre">2a5573c</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-6-0-2023-08-02">
+<h2>v1.6.0 (2023-08-02)<a class="headerlink" href="#v1-6-0-2023-08-02" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Feature<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add token_handler (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/a6b14252af5fdf3c4eb66aa980aa2446822cb702"><code class="docutils literal notranslate"><span class="pre">a6b1425</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-5-0-2023-01-05">
+<h2>v1.5.0 (2023-01-05)<a class="headerlink" href="#v1-5-0-2023-01-05" title="Permalink to this heading">#</a></h2>
+<section id="id2">
+<h3>Feature<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make it possible to swap the underlying regex module (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/b47995ee40c0e1c43afa68bc891770670e0e1502"><code class="docutils literal notranslate"><span class="pre">b47995e</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="fix">
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Allow expect_eof() to succeed even if the &quot;eof&quot; token was already consumed (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/7a8e7995e3e9d74a7146e15c30440795ce026fcc"><code class="docutils literal notranslate"><span class="pre">7a8e799</span></code></a>)</p></li>
+<li><p>Update typing (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/0ce06c7923a694496382060646d91317f6b8bed9"><code class="docutils literal notranslate"><span class="pre">0ce06c7</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-4-2-2022-06-02">
+<h2>v1.4.2 (2022-06-02)<a class="headerlink" href="#v1-4-2-2022-06-02" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Fix<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update mudkip (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/a58854cb7c3a699653d02dc4de82d21d45f637f9"><code class="docutils literal notranslate"><span class="pre">a58854c</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-4-1-2022-05-02">
+<h2>v1.4.1 (2022-05-02)<a class="headerlink" href="#v1-4-1-2022-05-02" title="Permalink to this heading">#</a></h2>
+<section id="id4">
+<h3>Fix<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Take into account repeating newlines before emitting dedent tokens (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/109552c2b363359577f9afa1071d347e8ab55499"><code class="docutils literal notranslate"><span class="pre">109552c</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-4-0-2022-04-12">
+<h2>v1.4.0 (2022-04-12)<a class="headerlink" href="#v1-4-0-2022-04-12" title="Permalink to this heading">#</a></h2>
+<section id="id5">
+<h3>Feature<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add notes (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/8be67ce6c4c942689fe93ee73d83a2eed19030ae"><code class="docutils literal notranslate"><span class="pre">8be67ce</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-3-4-2022-04-06">
+<h2>v1.3.4 (2022-04-06)<a class="headerlink" href="#v1-3-4-2022-04-06" title="Permalink to this heading">#</a></h2>
+<section id="id6">
+<h3>Fix<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Better mechanism for tracking alternative errors (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/4e0c3f2e5a72e095c57a84ba5c59414151b06b19"><code class="docutils literal notranslate"><span class="pre">4e0c3f2</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-3-3-2022-04-02">
+<h2>v1.3.3 (2022-04-02)<a class="headerlink" href="#v1-3-3-2022-04-02" title="Permalink to this heading">#</a></h2>
+<section id="id7">
+<h3>Fix<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Keep track of alternative errors (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/9bee458408166badad4795e8174935ea615ea055"><code class="docutils literal notranslate"><span class="pre">9bee458</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-3-2-2022-02-19">
+<h2>v1.3.2 (2022-02-19)<a class="headerlink" href="#v1-3-2-2022-02-19" title="Permalink to this heading">#</a></h2>
+<section id="id8">
+<h3>Fix<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update docs (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/a788ff194eb630555a01ba9837a160e40f97dbec"><code class="docutils literal notranslate"><span class="pre">a788ff1</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-3-1-2021-12-06">
+<h2>v1.3.1 (2021-12-06)<a class="headerlink" href="#v1-3-1-2021-12-06" title="Permalink to this heading">#</a></h2>
+<section id="id9">
+<h3>Fix<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Sort expected patterns in explanation (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/c1c26cb874229a5e0319c882f3b6e5567fd14870"><code class="docutils literal notranslate"><span class="pre">c1c26cb</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-3-0-2021-12-01">
+<h2>v1.3.0 (2021-12-01)<a class="headerlink" href="#v1-3-0-2021-12-01" title="Permalink to this heading">#</a></h2>
+<section id="id10">
+<h3>Feature<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make it possible to copy the stream (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/5a4a41c8f4a137a9c98bdda856cf4a4ba2169d0b"><code class="docutils literal notranslate"><span class="pre">5a4a41c</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-7-2021-11-30">
+<h2>v1.2.7 (2021-11-30)<a class="headerlink" href="#v1-2-7-2021-11-30" title="Permalink to this heading">#</a></h2>
+<section id="id11">
+<h3>Fix<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Get() method was returning a list instead of a single token (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/accf7843f1263dbba6aa0893a157be608ed1758a"><code class="docutils literal notranslate"><span class="pre">accf784</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-6-2021-11-25">
+<h2>v1.2.6 (2021-11-25)<a class="headerlink" href="#v1-2-6-2021-11-25" title="Permalink to this heading">#</a></h2>
+<section id="id12">
+<h3>Fix<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Prevent duplicating expected patterns (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/10cec045e3658333cf9a381fd166bcb8cf1a3064"><code class="docutils literal notranslate"><span class="pre">10cec04</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-5-2021-11-25">
+<h2>v1.2.5 (2021-11-25)<a class="headerlink" href="#v1-2-5-2021-11-25" title="Permalink to this heading">#</a></h2>
+<section id="id13">
+<h3>Fix<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Simplify expected_patterns merging (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/ad10e50804770a11c530a8234aeadd6b9561fb0f"><code class="docutils literal notranslate"><span class="pre">ad10e50</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-4-2021-11-25">
+<h2>v1.2.4 (2021-11-25)<a class="headerlink" href="#v1-2-4-2021-11-25" title="Permalink to this heading">#</a></h2>
+<section id="id14">
+<h3>Fix<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Properly prioritize errors that occur later in the stream (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/a665924a68e43a6f0f7b1b8cc069761b32436323"><code class="docutils literal notranslate"><span class="pre">a665924</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-3-2021-10-20">
+<h2>v1.2.3 (2021-10-20)<a class="headerlink" href="#v1-2-3-2021-10-20" title="Permalink to this heading">#</a></h2>
+<section id="id15">
+<h3>Fix<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Set invalid syntax location for unexpected token (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/423180921e036bdfb0ea3c1025841248aedbb010"><code class="docutils literal notranslate"><span class="pre">4231809</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-2-2021-10-09">
+<h2>v1.2.2 (2021-10-09)<a class="headerlink" href="#v1-2-2-2021-10-09" title="Permalink to this heading">#</a></h2>
+<section id="id16">
+<h3>Fix<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Handle windows line endings (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/068144d0cadad0265ae292ec5dd9a925265735ef"><code class="docutils literal notranslate"><span class="pre">068144d</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-1-2021-09-24">
+<h2>v1.2.1 (2021-09-24)<a class="headerlink" href="#v1-2-1-2021-09-24" title="Permalink to this heading">#</a></h2>
+<section id="id17">
+<h3>Fix<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>With_horizontal_offset doesn't modify unkown location anymore (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/e17f897fec2feb53b0df3c7c62efdb0fe6c1fcd1"><code class="docutils literal notranslate"><span class="pre">e17f897</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-2-0-2021-09-19">
+<h2>v1.2.0 (2021-09-19)<a class="headerlink" href="#v1-2-0-2021-09-19" title="Permalink to this heading">#</a></h2>
+<section id="id18">
+<h3>Feature<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make it possible to know if a checkpoint was rolled back (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/0765e96aec93bcc6b0a60956ac509afd4f63e1c6"><code class="docutils literal notranslate"><span class="pre">0765e96</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-1-0-2021-09-16">
+<h2>v1.1.0 (2021-09-16)<a class="headerlink" href="#v1-1-0-2021-09-16" title="Permalink to this heading">#</a></h2>
+<section id="id19">
+<h3>Feature<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add stream.reset() (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/1af0d47b93082ae374ca8edef8f03f8a549e1fdb"><code class="docutils literal notranslate"><span class="pre">1af0d47</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>Fix<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Do not register the first alternative exception twice (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/1bb71027bdf126ae5c439c149b34a99eeb5973fd"><code class="docutils literal notranslate"><span class="pre">1bb7102</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-5-2021-09-15">
+<h2>v1.0.5 (2021-09-15)<a class="headerlink" href="#v1-0-5-2021-09-15" title="Permalink to this heading">#</a></h2>
+<section id="id21">
+<h3>Fix<a class="headerlink" href="#id21" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make it possible to use None to disable previous rules (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/66e468ad068a3b1c9c34f0e72b63df38b7710a81"><code class="docutils literal notranslate"><span class="pre">66e468a</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-4-2021-09-14">
+<h2>v1.0.4 (2021-09-14)<a class="headerlink" href="#v1-0-4-2021-09-14" title="Permalink to this heading">#</a></h2>
+<section id="id22">
+<h3>Fix<a class="headerlink" href="#id22" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add period to all error messages (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/c1c32b02732b66ac4080585f1360bfc429c7f0e2"><code class="docutils literal notranslate"><span class="pre">c1c32b0</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-3-2021-09-14">
+<h2>v1.0.3 (2021-09-14)<a class="headerlink" href="#v1-0-3-2021-09-14" title="Permalink to this heading">#</a></h2>
+<section id="id23">
+<h3>Fix<a class="headerlink" href="#id23" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Don't show token value if it's empty (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/6337bfd35f0f51996cfae15174fe4f1b1428b7f2"><code class="docutils literal notranslate"><span class="pre">6337bfd</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-2-2021-09-14">
+<h2>v1.0.2 (2021-09-14)<a class="headerlink" href="#v1-0-2-2021-09-14" title="Permalink to this heading">#</a></h2>
+<section id="id24">
+<h3>Fix<a class="headerlink" href="#id24" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Don't detect indent when the line is blank (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/175e02eadb75d027199f268edbede774632ab34c"><code class="docutils literal notranslate"><span class="pre">175e02e</span></code></a>)</p></li>
+<li><p>Properly handle full dedent (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/04b9dab09bf32cb368a60a009650689e7cf24145"><code class="docutils literal notranslate"><span class="pre">04b9dab</span></code></a>)</p></li>
+<li><p>Add eof and invalid tokens (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/264a398ad4e55e89e0bfb503db2af98b38492d00"><code class="docutils literal notranslate"><span class="pre">264a398</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-1-2021-09-08">
+<h2>v1.0.1 (2021-09-08)<a class="headerlink" href="#v1-0-1-2021-09-08" title="Permalink to this heading">#</a></h2>
+<section id="id25">
+<h3>Fix<a class="headerlink" href="#id25" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Handle non SourceLocation end_location in set_location (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/f16b378fbdc52942bcf14a8d4b41d34158d867d7"><code class="docutils literal notranslate"><span class="pre">f16b378</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-0-0-2021-09-08">
+<h2>v1.0.0 (2021-09-08)<a class="headerlink" href="#v1-0-0-2021-09-08" title="Permalink to this heading">#</a></h2>
+<section id="id26">
+<h3>Feature<a class="headerlink" href="#id26" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Move SourceLocation into its own module (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/95aabae6058bb3c13bbd4f15a372d480f94a22b2"><code class="docutils literal notranslate"><span class="pre">95aabae</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="breaking">
+<h3>Breaking<a class="headerlink" href="#breaking" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>remove InvalidSyntax.set_location in favor of the general-purpose setlocation function  (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/95aabae6058bb3c13bbd4f15a372d480f94a22b2"><code class="docutils literal notranslate"><span class="pre">95aabae</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-5-2021-09-04">
+<h2>v0.7.5 (2021-09-04)<a class="headerlink" href="#v0-7-5-2021-09-04" title="Permalink to this heading">#</a></h2>
+<section id="id27">
+<h3>Fix<a class="headerlink" href="#id27" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Combine unexpected token patterns when using the choose() method (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/b8665e8b10e451467e2dae1659e9c999213aa348"><code class="docutils literal notranslate"><span class="pre">b8665e8</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-4-2021-08-30">
+<h2>v0.7.4 (2021-08-30)<a class="headerlink" href="#v0-7-4-2021-08-30" title="Permalink to this heading">#</a></h2>
+<section id="id28">
+<h3>Fix<a class="headerlink" href="#id28" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Tweak pattern explanation when there are a lot of token types (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/0a9e007ea77095e040f87c9c0c61539b3245e7a1"><code class="docutils literal notranslate"><span class="pre">0a9e007</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-3-2021-08-30">
+<h2>v0.7.3 (2021-08-30)<a class="headerlink" href="#v0-7-3-2021-08-30" title="Permalink to this heading">#</a></h2>
+<section id="id29">
+<h3>Fix<a class="headerlink" href="#id29" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Properly restore previous regex when syntax changes (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/aeae860707149ec6bd1e2d730dd613cf097c231d"><code class="docutils literal notranslate"><span class="pre">aeae860</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-2-2021-08-29">
+<h2>v0.7.2 (2021-08-29)<a class="headerlink" href="#v0-7-2-2021-08-29" title="Permalink to this heading">#</a></h2>
+<section id="id30">
+<h3>Fix<a class="headerlink" href="#id30" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Raise IndexError for negative indices for current and previous tokens (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/7b5010bfb801ee1e72d1a16a039aa2ff9ab7d1b9"><code class="docutils literal notranslate"><span class="pre">7b5010b</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-1-2021-08-28">
+<h2>v0.7.1 (2021-08-28)<a class="headerlink" href="#v0-7-1-2021-08-28" title="Permalink to this heading">#</a></h2>
+<section id="id31">
+<h3>Fix<a class="headerlink" href="#id31" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make it possible to emit errors from tokens (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/b97ab2d4913c2f0410251ab0cbb817f5082a61df"><code class="docutils literal notranslate"><span class="pre">b97ab2d</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-7-0-2021-07-28">
+<h2>v0.7.0 (2021-07-28)<a class="headerlink" href="#v0-7-0-2021-07-28" title="Permalink to this heading">#</a></h2>
+<section id="id32">
+<h3>Feature<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add stream.alternative(bool) (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/3adef707670c8a1cb00cca3c3d5174c1db4f0d0b"><code class="docutils literal notranslate"><span class="pre">3adef70</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-6-2-2021-07-23">
+<h2>v0.6.2 (2021-07-23)<a class="headerlink" href="#v0-6-2-2021-07-23" title="Permalink to this heading">#</a></h2>
+<section id="id33">
+<h3>Fix<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Don't capture newlines in whitespace tokens (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/d17783eb3f13ce4eb5c18ee36eb3bc92434f10a9"><code class="docutils literal notranslate"><span class="pre">d17783e</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-6-1-2021-07-22">
+<h2>v0.6.1 (2021-07-22)<a class="headerlink" href="#v0-6-1-2021-07-22" title="Permalink to this heading">#</a></h2>
+<section id="id34">
+<h3>Fix<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Handle pattern explanation with no pattern (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/1de098b069315cb56670739238f133020fd5fd3c"><code class="docutils literal notranslate"><span class="pre">1de098b</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-6-0-2021-07-22">
+<h2>v0.6.0 (2021-07-22)<a class="headerlink" href="#v0-6-0-2021-07-22" title="Permalink to this heading">#</a></h2>
+<section id="id35">
+<h3>Feature<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add arbitrary user data (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/105553f073a03ccee25eb2330f6d69459279802b"><code class="docutils literal notranslate"><span class="pre">105553f</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-5-0-2021-06-24">
+<h2>v0.5.0 (2021-06-24)<a class="headerlink" href="#v0-5-0-2021-06-24" title="Permalink to this heading">#</a></h2>
+<section id="id36">
+<h3>Feature<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add alternative method and choose method (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/0794172e558722bceb3353af609562520185967c"><code class="docutils literal notranslate"><span class="pre">0794172</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id37">
+<h3>Fix<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Swallow syntax errors when checkpoint is not committed yet (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/54e77ef25033cd0a19ec7d716deb855ac389d0d7"><code class="docutils literal notranslate"><span class="pre">54e77ef</span></code></a>)</p></li>
+<li><p>Don't raise UnexpectedEOF if peek_until without patterns (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/bcee95af5d25344f29f9de43c3b6ed2c7d1e2c27"><code class="docutils literal notranslate"><span class="pre">bcee95a</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-1-2021-06-17">
+<h2>v0.4.1 (2021-06-17)<a class="headerlink" href="#v0-4-1-2021-06-17" title="Permalink to this heading">#</a></h2>
+<section id="id38">
+<h3>Fix<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Typo (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/934f52c1d5c513b208ac669249f2a454ab8cd68e"><code class="docutils literal notranslate"><span class="pre">934f52c</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-0-2021-06-17">
+<h2>v0.4.0 (2021-06-17)<a class="headerlink" href="#v0-4-0-2021-06-17" title="Permalink to this heading">#</a></h2>
+<section id="id39">
+<h3>Feature<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add collect_any and docs (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/2d35ba35ce889002d3d8f205e9a9dd1ae7b78618"><code class="docutils literal notranslate"><span class="pre">2d35ba3</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id40">
+<h3>Fix<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Take into account indentation_skip (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/cbfe3e3c5f98b91346544cfe9af0e9dcff595343"><code class="docutils literal notranslate"><span class="pre">cbfe3e3</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-0-2021-06-16">
+<h2>v0.3.0 (2021-06-16)<a class="headerlink" href="#v0-3-0-2021-06-16" title="Permalink to this heading">#</a></h2>
+<section id="id41">
+<h3>Feature<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add stream checkpoint (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/8ad92bfeea17fb5b5d6abbb518df6f43c5209b61"><code class="docutils literal notranslate"><span class="pre">8ad92bf</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id42">
+<h3>Fix<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Accurate end_colno when the token contains newlines (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/3cdb432999cf6e1fe3224e1507c9d61ca73ce6c7"><code class="docutils literal notranslate"><span class="pre">3cdb432</span></code></a>)</p></li>
+<li><p>Collect with no patterns properly defers to the main iterator (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/3c6000a3f326fa555b05842adb8752ea4acc3144"><code class="docutils literal notranslate"><span class="pre">3c6000a</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update README (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/4739d8389b25752eba91ef39761e52a93a96c455"><code class="docutils literal notranslate"><span class="pre">4739d83</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-0-2021-06-14">
+<h2>v0.2.0 (2021-06-14)<a class="headerlink" href="#v0-2-0-2021-06-14" title="Permalink to this heading">#</a></h2>
+<section id="id43">
+<h3>Feature<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add stream.peek_until (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/8b0475c3a4670d63202eb144e0b2b86c1b187bac"><code class="docutils literal notranslate"><span class="pre">8b0475c</span></code></a>)</p></li>
+<li><p>Add token stream (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/02bdabdc942a0a85db1d38f0c94fcbd4cf441745"><code class="docutils literal notranslate"><span class="pre">02bdabd</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id44">
+<h3>Fix<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add getting started (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/1907b0640405d56f67377602b5d834ada3af8c28"><code class="docutils literal notranslate"><span class="pre">1907b06</span></code></a>)</p></li>
+</ul>
+</section>
+<section id="id45">
+<h3>Documentation<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update README (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/d9fb1dc85eee48755ee7448a9c1051daedad256d"><code class="docutils literal notranslate"><span class="pre">d9fb1dc</span></code></a>)</p></li>
+<li><p>Add s-expression example (<a class="reference external" href="https://github.com/vberlier/tokenstream/commit/bb2b50367f5d55b5092f3dd869e9d417661e1ea0"><code class="docutils literal notranslate"><span class="pre">bb2b503</span></code></a>)</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="../api_reference/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">API reference</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    </body>
+</html>
